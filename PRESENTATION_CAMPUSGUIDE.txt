@@ -1,0 +1,197 @@
+========================================================
+   PRÉSENTATION DU PROJET — CAMPUSGUIDE
+   Université Nouveaux Horizons (UNH)
+========================================================
+
+
+INTRODUCTION
+============
+
+Bonjour à tous.
+
+Je m'appelle Bonheur Nzau et aujourd'hui je vais vous présenter
+CampusGuide, une application web que j'ai conçue et développée pour
+améliorer la vie quotidienne des étudiants de l'Université Nouveaux Horizons.
+
+
+QU'EST-CE QUE CAMPUSGUIDE ?
+=============================
+
+CampusGuide est une plateforme numérique complète qui centralise
+toutes les informations dont un étudiant a besoin en un seul endroit.
+
+L'objectif principal est simple :
+  → Aider les étudiants à mieux s'orienter, s'organiser et s'intégrer
+    dans la vie universitaire.
+
+Au lieu de chercher des informations sur des panneaux, d'envoyer des
+emails pour trouver une salle, ou de rater des événements faute de
+communication, CampusGuide rassemble tout en un clic.
+
+
+LES FONCTIONNALITÉS PRINCIPALES
+=================================
+
+1. PLAN DU CAMPUS (Page "Campus")
+   --------------------------------
+   - Visualisation interactive de tous les bâtiments (UNH 1, 2, 3)
+   - Chaque salle possède sa propre fiche avec :
+       * Une photo réelle de la salle
+       * Sa description (équipements, capacité, usage)
+       * Son itinéraire précis depuis l'entrée du bâtiment
+   - Barre de recherche pour trouver rapidement une salle ou un bureau
+   - Salles répertoriées : salles de cours, laboratoires, bibliothèque,
+     bureaux administratifs, amphithéâtres, centre de simulation médicale
+
+2. CALENDRIER ACADÉMIQUE (Page "Calendrier")
+   --------------------------------------------
+   - Affichage des événements en temps réel depuis la base de données
+   - Possibilité de s'inscrire aux événements
+   - Vue mensuelle du calendrier académique (examens, congés, rentrées)
+   - L'administrateur peut créer et supprimer des événements directement
+
+3. ESPACE MENTORS (Page "Mentors")
+   -----------------------------------
+   - Annuaire des étudiants mentors disponibles
+   - Filtrage par filière et spécialisation
+   - Les étudiants peuvent soumettre une candidature comme mentor
+   - L'administration valide ou refuse les demandes depuis le dashboard
+
+4. CLUBS ÉTUDIANTS (Page "Clubs")
+   ----------------------------------
+   - Répertoire de tous les clubs et associations de l'université
+   - Filtrage par catégorie (sport, culture, science, etc.)
+   - Rejoindre un club en un clic
+
+5. ORIENTATION (Page "Orientation")
+   ------------------------------------
+   - Quiz interactif pour aider les étudiants à choisir leur filière
+   - Recommandations personnalisées selon les intérêts
+
+6. PROFIL ÉTUDIANT (Page "Profil")
+   -----------------------------------
+   - Gestion du compte : nom, filière, promotion
+   - Upload et sauvegarde de la photo de profil
+   - Chaque compte a ses propres données isolées
+   - Modification du mot de passe sécurisée
+
+7. TABLEAU DE BORD ADMIN
+   ------------------------
+   - Gestion complète des comptes étudiants (modifier, supprimer)
+   - Modification de l'email et du nom des comptes
+   - Validation des demandes de mentors
+   - Création et suppression d'événements au calendrier
+
+
+TECHNOLOGIE UTILISÉE
+======================
+
+CampusGuide est une application Full-Stack moderne :
+
+  FRONTEND (Interface utilisateur)
+  ----------------------------------
+  - React.js  : Framework JavaScript pour interfaces dynamiques
+  - Vite      : Outil de build ultra-rapide
+  - TailwindCSS : Système de design responsive et moderne
+  - React Router : Navigation entre les pages
+  - Font Awesome : Icônes
+
+  BACKEND (Serveur et données)
+  ------------------------------
+  - Node.js   : Environnement JavaScript côté serveur
+  - Express.js : Framework pour créer les APIs REST
+  - MySQL     : Base de données relationnelle
+  - JWT       : Sécurité — authentification par token
+  - Bcrypt    : Chiffrement des mots de passe
+
+  ARCHITECTURE
+  --------------
+  - API REST sécurisée avec authentification JWT
+  - Isolation des données par compte utilisateur
+  - Compression des images côté client (Canvas API)
+  - Système de rôles : étudiant / administrateur
+
+
+SYSTÈME DE COMPTES ET SÉCURITÉ
+================================
+
+L'application gère deux types de comptes :
+
+  ÉTUDIANT
+  ---------
+  - Accès à toutes les fonctionnalités publiques
+  - Consultation du plan du campus
+  - Inscription aux événements
+  - Gestion de son propre profil
+  - Réception de notifications
+
+  ADMINISTRATEUR
+  ---------------
+  - Accès au tableau de bord privé
+  - Gestion de tous les comptes étudiants
+  - Création et suppression d'événements
+  - Validation des demandes de mentors
+  - Aucune fuite de données entre les comptes
+
+Les mots de passe sont chiffrés (Bcrypt, 12 rounds).
+Chaque session est sécurisée par un token JWT.
+
+
+COMPTES DE DÉMONSTRATION
+==========================
+
+Pour cette démonstration, les comptes suivants sont disponibles :
+
+  ADMINISTRATEUR
+  ---------------
+  Email    : nzaubonheur84@gmail.com
+  Mot de passe : campus123
+
+  EXEMPLES D'ÉTUDIANTS
+  ----------------------
+  Email    : jeankasongo@gmail.com       | Filière : Informatique
+  Email    : makalexaucee@gmail.com      | Filière : Médecine
+  Email    : lubakijonathan@gmail.com    | Filière : Droit
+  Email    : gradimunkana@gmail.com      | Filière : Architecture
+  Email    : merveillembanza@gmail.com   | Filière : SIC/Multimédia
+
+  Mot de passe (pour tous) : campus123
+
+
+POINTS FORTS DU PROJET
+========================
+
+  ✦ Application complète et fonctionnelle (pas un prototype)
+  ✦ Base de données réelle (MySQL)
+  ✦ Sécurité professionnelle (JWT + Bcrypt)
+  ✦ Interface moderne et responsive (mobile + desktop)
+  ✦ Données réelles de l'université (salles, filières, bâtiments)
+  ✦ Rôles distincts : étudiant / administrateur
+  ✦ Photos réelles du campus intégrées
+  ✦ Système de notifications en temps réel
+
+
+CONCLUSION
+===========
+
+CampusGuide répond à un besoin réel et concret :
+donner aux étudiants de l'UNH un outil moderne,
+fiable et facile à utiliser pour vivre pleinement
+leur expérience universitaire.
+
+Ce projet est le fruit d'un travail de développement complet,
+de la conception de la base de données jusqu'à l'interface
+utilisateur finale.
+
+Je suis à votre disposition pour toute question.
+
+Merci de votre attention.
+
+                                         — Bonheur Nzauboni
+                                           Étudiant en Informatique
+                                           Université Nouveaux Horizons
+
+
+========================================================
+   FIN DE LA PRÉSENTATION
+========================================================

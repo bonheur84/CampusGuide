@@ -92,9 +92,9 @@ const Guide = () => {
              <video 
                 controls 
                 className="w-full h-full object-cover"
-                poster="https://images.unsplash.com/photo-1523050353091-c1198822d737?auto=format&fit=crop&q=80&w=1200"
+                poster="assets/Uniersite-Nouveaux-Horizons.jpg"
               >
-                <source src="/assets/cambridge.mp4" type="video/mp4" />
+                <source src="/assets/horizons.mp4" type="video/mp4" />
                 Votre navigateur ne supporte pas la lecture de vidéos.
              </video>
           </div>
@@ -103,7 +103,7 @@ const Guide = () => {
               <i className="fa-solid fa-info-circle text-primary"></i> Document officiel
             </div>
             <div className="flex items-center gap-2 text-[13px] font-semibold text-slate-500">
-              <i className="fa-solid fa-clock text-primary"></i> 5:12
+              <i className="fa-solid fa-clock text-primary"></i> 2:11
             </div>
             <div className="flex items-center gap-2 text-[13px] font-semibold text-slate-500">
               <i className="fa-solid fa-graduation-cap text-primary"></i> Nouveaux étudiants

@@ -5,22 +5,125 @@ const Orientation = () => {
   const [resultat, setResultat] = useState(null);
   const [voirDetails, setVoirDetails] = useState(false);
   const [selectionTemporaire, setSelectionTemporaire] = useState({});
+
+  // Fonction pour mélanger un tableau
+  const melangerArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
+  // Options de base pour chaque filière
+  const optionsDeBase = [
+    { t: "La technologie et le code", v: "informatique" }, 
+    { t: "Aider et soigner les gens", v: "medecine" }, 
+    { t: "Défendre les droits des autres", v: "droit" }, 
+    { t: "Concevoir des systèmes", v: "science technologique" }, 
+    { t: "Innover dans l'alimentation", v: "science des aliments et de l'environnement" }, 
+    { t: "Gérer une entreprise", v: "gestion" }, 
+    { t: "Créer des contenus multimédia", v: "SIC/multimedia" }
+  ];
+
   const questions = [
-    { id: 1, texte: "Qu'est-ce qui vous passionne le plus ?", options: [{ t: "La technologie et le code", v: "informatique" }, { t: "Aider et soigner les gens", v: "medecine" }, { t: "Défendre les droits des autres", v: "droit" }, { t: "Concevoir des systèmes", v: "science technologique" }, { t: "Innover dans l'alimentation", v: "science des aliments et de l'environnement" }, { t: "Gérer une entreprise", v: "gestion" }, { t: "Créer des contenus multimédia", v: "SIC/multimedia" }] },
-    { id: 2, texte: "Quelle est votre matière préférée ?", options: [{ t: "Mathématiques", v: "informatique" }, { t: "Biologie", v: "medecine" }, { t: "Histoire / Philo", v: "droit" }, { t: "Physique et Chimie", v: "science technologique" }, { t: "Chimie alimentaire", v: "science des aliments et de l'environnement" }, { t: "Économie", v: "gestion" }, { t: "Communication visuelle", v: "SIC/multimedia" }] },
-    { id: 3, texte: "Où vous voyez-vous dans 10 ans ?", options: [{ t: "Créer un logiciel", v: "informatique" }, { t: "Opérer un patient", v: "medecine" }, { t: "Plaider au tribunal", v: "droit" }, { t: "Concevoir un pont", v: "science technologique" }, { t: "Travailler en laboratoire alimentaire", v: "science des aliments et de l'environnement" }, { t: "Diriger une banque", v: "gestion" }, { t: "Produire des films", v: "SIC/multimedia" }] },
-    { id: 4, texte: "Comment préférez-vous travailler ?", options: [{ t: "Seul devant un ordinateur", v: "informatique" }, { t: "En équipe dans un hôpital", v: "medecine" }, { t: "En étudiant des textes de loi", v: "droit" }, { t: "En équipe sur un chantier", v: "science technologique" }, { t: "En cuisine industrielle", v: "science des aliments et de l'environnement" }, { t: "En organisant des réunions", v: "gestion" }, { t: "En studio de création", v: "SIC/multimedia" }] },
-    { id: 5, texte: "Quel type de problèmes aimez-vous résoudre ?", options: [{ t: "Des bugs informatiques", v: "informatique" }, { t: "Des diagnostics médicaux", v: "medecine" }, { t: "Des litiges complexes", v: "droit" }, { t: "Des défis d'ingénierie", v: "science technologique" }, { t: "Problèmes de qualité alimentaire", v: "science des aliments et de l'environnement" }, { t: "Des défis financiers", v: "gestion" }, { t: "Problèmes techniques audio/vidéo", v: "SIC/multimedia" }] },
-    { id: 6, texte: "Si vous deviez lire un livre, ce serait sur...", options: [{ t: "L'intelligence artificielle", v: "informatique" }, { t: "Les découvertes médicales", v: "medecine" }, { t: "Les grands procès historiques", v: "droit" }, { t: "Les innovations technologiques", v: "science technologique" }, { t: "Les secrets de l'alimentation", v: "science des aliments et de l'environnement" }, { t: "Les secrets du succès entrepreneurial", v: "gestion" }, { t: "L'histoire du cinéma", v: "SIC/multimedia" }] },
-    { id: 7, texte: "Quelle activité vous semble la plus stimulante ?", options: [{ t: "Coder une application", v: "informatique" }, { t: "Réaliser une expérience en labo", v: "medecine" }, { t: "Analyser un contrat", v: "droit" }, { t: "Construire une machine", v: "science technologique" }, { t: "Inventer une recette", v: "science des aliments et de l'environnement" }, { t: "Négocier une vente", v: "gestion" }, { t: "Monter un clip vidéo", v: "SIC/multimedia" }] },
-    { id: 8, texte: "Votre environnement de travail idéal est...", options: [{ t: "Un espace moderne et technologique", v: "informatique" }, { t: "Une clinique ou un laboratoire", v: "medecine" }, { t: "Un cabinet ou un tribunal", v: "droit" }, { t: "Un laboratoire d'ingénierie", v: "science technologique" }, { t: "Une cuisine industrielle", v: "science des aliments et de l'environnement" }, { t: "Un bureau de direction", v: "gestion" }, { t: "Un plateau de tournage", v: "SIC/multimedia" }] },
-    { id: 9, texte: "Quel super-pouvoir aimeriez-vous avoir ?", options: [{ t: "Tout automatiser par la pensée", v: "informatique" }, { t: "Guérir instantanément", v: "medecine" }, { t: "Détecter les mensonges", v: "droit" }, { t: "Créer des matériaux révolutionnaires", v: "science technologique" }, { t: "Éradiquer la faim", v: "science des aliments et de l'environnement" }, { t: "Multiplier les investissements", v: "gestion" }, { t: "Contrôler les esprits", v: "SIC/multimedia" }] },
-    { id: 10, texte: "Pour vous, le succès c'est...", options: [{ t: "Innover technologiquement", v: "informatique" }, { t: "Sauver des vies", v: "medecine" }, { t: "Faire triompher la justice", v: "droit" }, { t: "Transformer le monde par l'ingénierie", v: "science technologique" }, { t: "Nourrir la planète", v: "science des aliments et de l'environnement" }, { t: "Bâtir un empire économique", v: "gestion" }, { t: "Devenir un influenceur multimédia", v: "SIC/multimedia" }] },
+    { id: 1, texte: "Qu'est-ce qui vous passionne le plus ?", options: melangerArray(optionsDeBase) },
+    { id: 2, texte: "Quelle est votre matière préférée ?", options: melangerArray([
+      { t: "Mathématiques", v: "informatique" }, 
+      { t: "Biologie", v: "medecine" }, 
+      { t: "Histoire / Philo", v: "droit" }, 
+      { t: "Physique et Chimie", v: "science technologique" }, 
+      { t: "Chimie alimentaire", v: "science des aliments et de l'environnement" }, 
+      { t: "Économie", v: "gestion" }, 
+      { t: "Communication visuelle", v: "SIC/multimedia" }
+    ]) },
+    { id: 3, texte: "Où vous voyez-vous dans 10 ans ?", options: melangerArray([
+      { t: "Créer un logiciel", v: "informatique" }, 
+      { t: "Opérer un patient", v: "medecine" }, 
+      { t: "Plaider au tribunal", v: "droit" }, 
+      { t: "Concevoir un pont", v: "science technologique" }, 
+      { t: "Travailler en laboratoire alimentaire", v: "science des aliments et de l'environnement" }, 
+      { t: "Diriger une banque", v: "gestion" }, 
+      { t: "Produire des films", v: "SIC/multimedia" }
+    ]) },
+    { id: 4, texte: "Comment préférez-vous travailler ?", options: melangerArray([
+      { t: "Seul devant un ordinateur", v: "informatique" }, 
+      { t: "En équipe dans un hôpital", v: "medecine" }, 
+      { t: "En étudiant des textes de loi", v: "droit" }, 
+      { t: "En équipe sur un chantier", v: "science technologique" }, 
+      { t: "En cuisine industrielle", v: "science des aliments et de l'environnement" }, 
+      { t: "En organisant des réunions", v: "gestion" }, 
+      { t: "En studio de création", v: "SIC/multimedia" }
+    ]) },
+    { id: 5, texte: "Quel type de problèmes aimez-vous résoudre ?", options: melangerArray([
+      { t: "Des bugs informatiques", v: "informatique" }, 
+      { t: "Des diagnostics médicaux", v: "medecine" }, 
+      { t: "Des litiges complexes", v: "droit" }, 
+      { t: "Des défis d'ingénierie", v: "science technologique" }, 
+      { t: "Problèmes de qualité alimentaire", v: "science des aliments et de l'environnement" }, 
+      { t: "Des défis financiers", v: "gestion" }, 
+      { t: "Problèmes techniques audio/vidéo", v: "SIC/multimedia" }
+    ]) },
+    { id: 6, texte: "Si vous deviez lire un livre, ce serait sur...", options: melangerArray([
+      { t: "L'intelligence artificielle", v: "informatique" }, 
+      { t: "Les découvertes médicales", v: "medecine" }, 
+      { t: "Les grands procès historiques", v: "droit" }, 
+      { t: "Les innovations technologiques", v: "science technologique" }, 
+      { t: "Les secrets de l'alimentation", v: "science des aliments et de l'environnement" }, 
+      { t: "Les secrets du succès entrepreneurial", v: "gestion" }, 
+      { t: "L'histoire du cinéma", v: "SIC/multimedia" }
+    ]) },
+    { id: 7, texte: "Quelle activité vous semble la plus stimulante ?", options: melangerArray([
+      { t: "Coder une application", v: "informatique" }, 
+      { t: "Réaliser une expérience en labo", v: "medecine" }, 
+      { t: "Analyser un contrat", v: "droit" }, 
+      { t: "Construire une machine", v: "science technologique" }, 
+      { t: "Inventer une recette", v: "science des aliments et de l'environnement" }, 
+      { t: "Négocier une vente", v: "gestion" }, 
+      { t: "Monter un clip vidéo", v: "SIC/multimedia" }
+    ]) },
+    { id: 8, texte: "Votre environnement de travail idéal est...", options: melangerArray([
+      { t: "Un espace moderne et technologique", v: "informatique" }, 
+      { t: "Une clinique ou un laboratoire", v: "medecine" }, 
+      { t: "Un cabinet ou un tribunal", v: "droit" }, 
+      { t: "Un laboratoire d'ingénierie", v: "science technologique" }, 
+      { t: "Une cuisine industrielle", v: "science des aliments et de l'environnement" }, 
+      { t: "Un bureau de direction", v: "gestion" }, 
+      { t: "Un plateau de tournage", v: "SIC/multimedia" }
+    ]) },
+    { id: 9, texte: "Quel super-pouvoir aimeriez-vous avoir ?", options: melangerArray([
+      { t: "Tout automatiser par la pensée", v: "informatique" }, 
+      { t: "Guérir instantanément", v: "medecine" }, 
+      { t: "Détecter les mensonges", v: "droit" }, 
+      { t: "Créer des matériaux révolutionnaires", v: "science technologique" }, 
+      { t: "Éradiquer la faim", v: "science des aliments et de l'environnement" }, 
+      { t: "Multiplier les investissements", v: "gestion" }, 
+      { t: "Contrôler les esprits", v: "SIC/multimedia" }
+    ]) },
+    { id: 10, texte: "Pour vous, le succès c'est...", options: melangerArray([
+      { t: "Innover technologiquement", v: "informatique" }, 
+      { t: "Sauver des vies", v: "medecine" }, 
+      { t: "Faire triompher la justice", v: "droit" }, 
+      { t: "Transformer le monde par l'ingénierie", v: "science technologique" }, 
+      { t: "Nourrir la planète", v: "science des aliments et de l'environnement" }, 
+      { t: "Bâtir un empire économique", v: "gestion" }, 
+      { t: "Devenir un influenceur multimédia", v: "SIC/multimedia" }
+    ]) }
   ];
   const gérerRéponse = (valeur) => {
     const nouvellesReponses = { ...reponses, [etape]: valeur };
     setReponses(nouvellesReponses);
     setSelectionTemporaire({ ...selectionTemporaire, [etape]: valeur });
+    
+    // Passer automatiquement à la question suivante
+    setTimeout(() => {
+      if (etape < questions.length) {
+        setEtape(etape + 1);
+      } else {
+        calculerResultat(nouvellesReponses);
+      }
+    }, 300); // Délai de 300ms pour montrer la sélection
   };
   const confirmerEtPasser = () => {
     const nouvellesReponses = { ...reponses, [etape]: selectionTemporaire[etape] };

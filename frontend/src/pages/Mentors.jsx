@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { apiMentors } from '../api';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { useContext } from 'react';
+import { useAlerte } from '../components/AlertePersonnalisee';
 const Mentors = () => {
   const { utilisateur } = useContext(ContexteUtilisateur);
   const [recherche, setRecherche] = useState('');
@@ -11,6 +12,7 @@ const Mentors = () => {
   const [listeMentors, setListeMentors] = useState([]);
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState(null);
+  const { montrerAlerte, AlerteComponent } = useAlerte();
   // Charger les mentors depuis le backend
   useEffect(() => {
     const chargerMentors = async () => {
@@ -139,6 +141,7 @@ const Mentors = () => {
           )}
         </section>
       </main>
+      <AlerteComponent />
     </Fragment>
   );
 };
@@ -152,9 +155,14 @@ const BoutonFiltre = ({ texte, actif, onClick, couleur }) => {
     </button>
   );
 };
-const contacterWhatsApp = (telephone) => {
+const contacterWhatsApp = async (telephone) => {
   if (!telephone) {
-    alert('Ce mentor n\'a pas renseigné de numéro de téléphone');
+    await montrerAlerte({
+      type: 'alert',
+      titre: 'Information',
+      message: 'Ce mentor n\'a pas renseigné de numéro de téléphone',
+      boutonConfirmText: 'OK'
+    });
     return;
   }
   // Nettoyer le numéro de téléphone (enlever les espaces, +, etc.)

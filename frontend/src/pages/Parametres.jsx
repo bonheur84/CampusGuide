@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiMentors } from '../api';
+import { useAlerte } from '../components/AlertePersonnalisee';
 
 const Parametres = () => {
   const [listeCandidatures, setListeCandidatures] = useState([]);
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState(null);
+  const { montrerAlerte, AlerteComponent } = useAlerte();
 
   useEffect(() => {
     chargerProfils();
@@ -24,13 +26,31 @@ const Parametres = () => {
   };
 
   const supprimerCandidature = async (id) => {
-    if (window.confirm('Voulez-vous vraiment retirer cette candidature de mentor ?')) {
+    const confirmed = await montrerAlerte({
+      type: 'confirm',
+      titre: 'Retirer la candidature',
+      message: 'Voulez-vous vraiment retirer cette candidature de mentor ?',
+      boutonConfirmText: 'Retirer',
+      boutonCancelText: 'Annuler'
+    });
+    
+    if (confirmed) {
       try {
         await apiMentors.supprimer(id);
         setListeCandidatures(prev => prev.filter(m => m.id !== id));
-        alert('La candidature a été retirée avec succès.');
+        await montrerAlerte({
+          type: 'success',
+          titre: 'Succès',
+          message: 'La candidature a été retirée avec succès.',
+          boutonConfirmText: 'OK'
+        });
       } catch (err) {
-        alert("Erreur lors de la suppression : " + err.message);
+        await montrerAlerte({
+          type: 'error',
+          titre: 'Erreur',
+          message: 'Erreur lors de la suppression : ' + err.message,
+          boutonConfirmText: 'OK'
+        });
       }
     }
   };
@@ -121,7 +141,7 @@ const Parametres = () => {
         </div>
 
         {erreur && <p className="text-red-500 text-center">{erreur}</p>}
-
+        <AlerteComponent />
       </section>
     </main>
   );

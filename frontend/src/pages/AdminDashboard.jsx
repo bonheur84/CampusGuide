@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { apiUtilisateurs, apiMentors, apiEvenements } from '../api';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAlerte } from '../components/AlertePersonnalisee';
 const AdminDashboard = () => {
   const { utilisateur, ajouterNotification } = useContext(ContexteUtilisateur);
   const [tab, setTab] = useState('utilisateurs'); // 'utilisateurs', 'mentors', 'evenements'
   const [utilisateurs, setUtilisateurs] = useState([]);
   const [mentors, setMentors] = useState([]);
   const [chargement, setChargement] = useState(true);
+  const { montrerAlerte, AlerteComponent } = useAlerte();
   // Formulaire événement
   const [evForm, setEvForm] = useState({
     titre: '', description: '', date: '', heure: '09:00', lieu: 'Campus Principal', categorie: 'tech'
@@ -51,7 +53,15 @@ const AdminDashboard = () => {
     }
   };
   const handleDeleteUser = async (id, nom) => {
-    if (window.confirm(`Voulez-vous vraiment supprimer définitivement le compte de ${nom} ?`)) {
+    const confirmed = await montrerAlerte({
+      type: 'confirm',
+      titre: 'Supprimer le compte',
+      message: `Voulez-vous vraiment supprimer définitivement le compte de ${nom} ?`,
+      boutonConfirmText: 'Supprimer',
+      boutonCancelText: 'Annuler'
+    });
+    
+    if (confirmed) {
       try {
         await apiUtilisateurs.supprimer(id);
         ajouterNotification("Compte supprimé", `Le compte de ${nom} a été effacé.`, "success", "fa-trash-can");
@@ -62,7 +72,15 @@ const AdminDashboard = () => {
     }
   };
   const handleDeleteMentor = async (id, nom) => {
-    if (window.confirm(`Voulez-vous vraiment supprimer le profil mentor de ${nom} ?`)) {
+    const confirmed = await montrerAlerte({
+      type: 'confirm',
+      titre: 'Supprimer le profil mentor',
+      message: `Voulez-vous vraiment supprimer le profil mentor de ${nom} ?`,
+      boutonConfirmText: 'Supprimer',
+      boutonCancelText: 'Annuler'
+    });
+    
+    if (confirmed) {
       try {
         await apiMentors.supprimer(id);
         ajouterNotification("Profil supprimé", `Le profil mentor de ${nom} a été retiré.`, "success", "fa-user-minus");
@@ -217,6 +235,7 @@ const AdminDashboard = () => {
           </AnimatePresence>
         )}
       </div>
+      <AlerteComponent />
     </main>
   );
 };

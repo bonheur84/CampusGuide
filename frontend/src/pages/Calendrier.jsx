@@ -1,12 +1,14 @@
 ﻿import React, { useState, useEffect, useContext } from 'react';
 import { apiEvenements } from '../api';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
+import { useAlerte } from '../components/AlertePersonnalisee';
 const Calendrier = () => {
   const { utilisateur } = useContext(ContexteUtilisateur);
   const estAdmin = utilisateur?.role === 'admin';
   const [evenementsServeur, setEvenementsServeur] = useState([]);
   const [chargementEv, setChargementEv] = useState(true);
   const [inscriptions, setInscriptions] = useState({});
+  const { montrerAlerte, AlerteComponent } = useAlerte();
   // Formulaire création (admin)
   const [formulaireOuvert, setFormulaireOuvert] = useState(false);
   const [creation, setCreation] = useState({
@@ -36,19 +38,50 @@ const Calendrier = () => {
       setEvenementsServeur(prev => [...prev, data.evenement].sort((a, b) => a.date.localeCompare(b.date)));
       setCreation({ titre: '', description: '', date: '', heure: '09:00', lieu: 'Campus Principal', categorie: 'academique', maxInscrits: 100, organisateur: 'Administration' });
       setFormulaireOuvert(false);
+      await montrerAlerte({
+        type: 'success',
+        titre: 'Succès',
+        message: 'L\'événement a été créé avec succès.',
+        boutonConfirmText: 'OK'
+      });
     } catch (err) {
-      alert(err.message || 'Erreur lors de la création.');
+      await montrerAlerte({
+        type: 'error',
+        titre: 'Erreur',
+        message: err.message || 'Erreur lors de la création.',
+        boutonConfirmText: 'OK'
+      });
     } finally {
       setEnvoiEnCours(false);
     }
   };
   const supprimerEvenement = async (id) => {
-    if (!window.confirm('Supprimer cet événement définitivement ?')) return;
-    try {
-      await apiEvenements.supprimer(id);
-      setEvenementsServeur(prev => prev.filter(e => e.id !== id));
-    } catch (err) {
-      alert(err.message || 'Erreur lors de la suppression.');
+    const confirmed = await montrerAlerte({
+      type: 'confirm',
+      titre: 'Supprimer l\'événement',
+      message: 'Supprimer cet événement définitivement ?',
+      boutonConfirmText: 'Supprimer',
+      boutonCancelText: 'Annuler'
+    });
+    
+    if (confirmed) {
+      try {
+        await apiEvenements.supprimer(id);
+        setEvenementsServeur(prev => prev.filter(e => e.id !== id));
+        await montrerAlerte({
+          type: 'success',
+          titre: 'Succès',
+          message: 'L\'événement a été supprimé avec succès.',
+          boutonConfirmText: 'OK'
+        });
+      } catch (err) {
+        await montrerAlerte({
+          type: 'error',
+          titre: 'Erreur',
+          message: err.message || 'Erreur lors de la suppression.',
+          boutonConfirmText: 'OK'
+        });
+      }
     }
   };
   const sInscrire = async (id) => {
@@ -58,8 +91,19 @@ const Calendrier = () => {
       setEvenementsServeur(prev =>
         prev.map(e => e.id === id ? { ...e, inscrits: data.inscrits } : e)
       );
+      await montrerAlerte({
+        type: 'success',
+        titre: 'Inscription réussie',
+        message: 'Vous êtes bien inscrit à cet événement.',
+        boutonConfirmText: 'OK'
+      });
     } catch (err) {
-      alert(err.message || "Inscription impossible.");
+      await montrerAlerte({
+        type: 'error',
+        titre: 'Erreur',
+        message: err.message || 'Inscription impossible.',
+        boutonConfirmText: 'OK'
+      });
     }
   };
   const mois = [
@@ -385,6 +429,7 @@ const Calendrier = () => {
           </a>
         </div>
       </section>
+      <AlerteComponent />
     </main>
   );
 };

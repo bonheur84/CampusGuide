@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS clubs (
   categorie_nom VARCHAR(80) NOT NULL,
   icone        VARCHAR(60)  DEFAULT 'fa-users',
   lien         TEXT         DEFAULT NULL,
+  competences  TEXT         DEFAULT NULL,
   created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -100,15 +101,15 @@ INSERT IGNORE INTO mentors (id, nom, filiere, annee, specialite, bio, note, nb_e
 ('m-001', 'Jean Dupont',   'informatique', 'L3', 'Développement Web',      'Passionné par React et le design UI/UX.', 4.8, 12, 1),
 
 -- ─── Données initiales — Clubs ────────────────────────────────────────────────
-INSERT IGNORE INTO clubs (id, nom, description, membres, categorie, categorie_nom, icone, lien) VALUES
-('c-001', 'Club de Manga',       'Partagez votre passion pour les mangas.', 206, 'art',       'Art & Culture', 'fa-book',       'https://wa.me/22997047047'),
-('c-002', "Club d'informatique", 'Hackathons, projets collaboratifs.',       62,  'tech',      'Tech',          'fa-code',       'https://wa.me/22997047047'),
-('c-003', 'Club de Scrabble',    'Des tournois réguliers.',                  45,  'academique','Académique',    'fa-chess-board','https://wa.me/22997047047'),
-('c-004', 'Club Musical',        'Instrument, chant, composition.',          33,  'art',       'Art & Culture', 'fa-music',      'https://wa.me/22997047047'),
-('c-005', "Club d'Echec",        'Tournois et analyses de parties.',         24,  'academique','Académique',    'fa-chess',      'https://wa.me/22997047047'),
-('c-006', 'Club Football',       'Entraînements hebdomadaires.',             98,  'sport',     'Sport',         'fa-futbol',     'https://wa.me/22997047047'),
-('c-007', 'Club Basketball',     'Rejoignez notre équipe de basket.',        28,  'sport',     'Sport',         'fa-basketball', 'https://wa.me/22997047047'),
-('c-008', "Club d'Art",          'Peinture, dessin et photographie.',        24,  'art',       'Art & Culture', 'fa-camera',     'https://wa.me/22997047047'),
-('c-009', 'Club Sciences',       'Expériences et conférences.',              37,  'academique','Académique',    'fa-flask',      'https://wa.me/22997047047'),
-('c-010', 'Club Volleyball',     "Entraînements de volley.",                 41,  'sport',     'Sport',         'fa-volleyball', 'https://wa.me/22997047047'),
-('c-011', 'Club Éloquence',      "Concours de débat et de plaidoirie.",      19,  'art',       'Art & Culture', 'fa-microphone', 'https://wa.me/22997047047');
+INSERT IGNORE INTO clubs (id, nom, description, membres, categorie, categorie_nom, icone, lien, competences) VALUES
+('c-001', 'Club de Manga',       'Partagez votre passion pour les mangas.', 206, 'art',       'Art & Culture', 'fa-book',       'https://wa.me/22997047047', '["Dessin", "Créativité", "Culture japonaise", "Animation"]'),
+('c-002', "Club d'informatique", 'Hackathons, projets collaboratifs.',       62,  'tech',      'Tech',          'fa-code',       'https://wa.me/22997047047', '["Programmation", "Travail d équipe", "Résolution de problèmes", "Innovation"]'),
+('c-003', 'Club de Scrabble',    'Des tournois réguliers.',                  45,  'academique','Académique',    'fa-chess-board','https://wa.me/22997047047', '["Orthographe", "Stratégie", "Concentration", "Compétition"]'),
+('c-004', 'Club Musical',        'Instrument, chant, composition.',          33,  'art',       'Art & Culture', 'fa-music',      'https://wa.me/22997047047', '["Musique", "Créativité", "Performance", "Travail d équipe"]'),
+('c-005', "Club d'Echec",        'Tournois et analyses de parties.',         24,  'academique','Académique',    'fa-chess',      'https://wa.me/22997047047', '["Stratégie", "Logique", "Patience", "Analyse"]'),
+('c-006', 'Club Football',       'Entraînements hebdomadaires.',             98,  'sport',     'Sport',         'fa-futbol',     'https://wa.me/22997047047', '["Travail d équipe", "Endurance", "Leadership", "Discipline"]'),
+('c-007', 'Club Basketball',     'Rejoignez notre équipe de basket.',        28,  'sport',     'Sport',         'fa-basketball', 'https://wa.me/22997047047', '["Coordination", "Travail d équipe", "Agilité", "Stratégie"]'),
+('c-008', "Club d'Art",          'Peinture, dessin et photographie.',        24,  'art',       'Art & Culture', 'fa-camera',     'https://wa.me/22997047047', '["Créativité", "Techniques artistiques", "Vision artistique", "Expression"]'),
+('c-009', 'Club Sciences',       'Expériences et conférences.',              37,  'academique','Académique',    'fa-flask',      'https://wa.me/22997047047', '["Méthode scientifique", "Analyse", "Recherche", "Communication"]'),
+('c-010', 'Club Volleyball',     "Entraînements de volley.",                 41,  'sport',     'Sport',         'fa-volleyball', 'https://wa.me/22997047047', '["Travail d équipe", "Réflexes", "Communication", "Endurance"]'),
+('c-011', 'Club Éloquence',      "Concours de débat et de plaidoirie.",      19,  'art',       'Art & Culture', 'fa-microphone', 'https://wa.me/22997047047', '["Art oratoire", "Argumentation", "Confiance en soi", "Communication"]');

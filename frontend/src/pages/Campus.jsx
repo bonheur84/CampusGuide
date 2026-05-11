@@ -327,57 +327,105 @@ const Campus = () => {
 
       {salleSelectionnee && (
         <>
-          <div className="fixed inset-0 bg-slate-900/40 z-3000" onClick={() => setSalleSelectionnee(null)}></div>
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[20px] w-[90%] max-w-[520px] z-4000 overflow-hidden shadow-[0_25px_50px_rgba(0,0,0,0.2)] anime-apparition">
-            <div className="relative h-52 overflow-hidden bg-slate-100">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-3000" onClick={() => setSalleSelectionnee(null)}></div>
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl w-[95%] max-w-[600px] z-4000 overflow-hidden shadow-2xl anime-apparition border border-gray-100">
+            {/* Header avec image et overlay moderne */}
+            <div className="relative h-56 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
               <img
                 src={salleSelectionnee.photo}
                 alt={salleSelectionnee.nom}
-                className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = 'https://picsum.photos/seed/campus/600/300'; }}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                onError={(e) => { e.target.src = 'https://picsum.photos/seed/campus-room/800/400'; }}
               />
-              <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              
+              {/* Bouton de fermeture moderne */}
               <button
-                className="absolute top-3 right-3 bg-white/90 border-none w-8 h-8 rounded-lg cursor-pointer text-sm text-slate-600 flex items-center justify-center hover:bg-white transition-all duration-200 shadow-md"
+                className="absolute top-4 right-4 bg-white/20 backdrop-blur-md border border-white/30 w-10 h-10 rounded-xl cursor-pointer text-white flex items-center justify-center hover:bg-white/30 transition-all duration-300 hover:scale-110"
                 onClick={() => setSalleSelectionnee(null)}
               >
-                <i className="fa-solid fa-times"></i>
+                <i className="fa-solid fa-times text-lg"></i>
               </button>
-              <div className="absolute bottom-4 left-5 text-white">
-                <h3 className="text-xl font-bold drop-shadow">{salleSelectionnee.nom}</h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${salleSelectionnee.typeCouleur}`}>
-                    {salleSelectionnee.type}
-                  </span>
-                  <span className="text-[11px] text-white/80 flex items-center gap-1">
-                    <i className="fa-solid fa-layer-group text-[10px]"></i> {salleSelectionnee.etage}
-                  </span>
-                  {salleSelectionnee.capacite && (
-                    <span className="text-[11px] text-white/80 flex items-center gap-1">
-                      <i className="fa-solid fa-users text-[10px]"></i> {salleSelectionnee.capacite} places
-                    </span>
-                  )}
+              
+              {/* Informations superposées */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2 drop-shadow-lg">{salleSelectionnee.nom}</h3>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${salleSelectionnee.typeCouleur} bg-white/90 backdrop-blur-sm`}>
+                        {salleSelectionnee.type}
+                      </span>
+                      <span className="text-xs text-white/90 flex items-center gap-1.5 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                        <i className="fa-solid fa-layer-group"></i> {salleSelectionnee.etage}
+                      </span>
+                      {salleSelectionnee.capacite && (
+                        <span className="text-xs text-white/90 flex items-center gap-1.5 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                          <i className="fa-solid fa-users"></i> {salleSelectionnee.capacite} places
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
+                    <i className="fa-solid fa-door-open text-xl text-white"></i>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
-              <div>
-                <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <i className="fa-solid fa-circle-info text-primary"></i> Description
-                </p>
-                <p className="text-[13.5px] text-slate-600 leading-relaxed">
+            {/* Contenu principal avec sections modernes */}
+            <div className="p-6 space-y-6">
+              {/* Section Description avec design moderne */}
+              <div className="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-5 border border-gray-100">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <i className="fa-solid fa-circle-info text-primary text-lg"></i>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Description</h4>
+                    <p className="text-xs text-gray-500">Caractéristiques de l'espace</p>
+                  </div>
+                </div>
+                <p className="text-gray-700 leading-relaxed text-sm">
                   {salleSelectionnee.description || 'Aucune description disponible pour cet espace.'}
                 </p>
               </div>
 
-              <div className="bg-sky-50 rounded-xl p-4 border border-sky-100">
-                <p className="text-xs font-black text-primary uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <i className="fa-solid fa-route"></i> Itinéraire
-                </p>
-                <p className="text-[13px] text-slate-600 leading-relaxed">
-                  {salleSelectionnee.itineraire || `Prenez l'escalier ou l'ascenseur vers le ${salleSelectionnee.etage}. La salle se trouve dans l'aile correspondante du bâtiment.`}
-                </p>
+              {/* Section Itinéraire avec design moderne */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+                    <i className="fa-solid fa-route text-white text-lg"></i>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Itinéraire</h4>
+                    <p className="text-xs text-gray-500">Comment s'y rendre</p>
+                  </div>
+                </div>
+                <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-blue-200/50">
+                  <p className="text-gray-700 leading-relaxed text-sm">
+                    {salleSelectionnee.itineraire || `Prenez l'escalier ou l'ascenseur vers le ${salleSelectionnee.etage}. La salle se trouve dans l'aile correspondante du bâtiment.`}
+                  </p>
+                </div>
+              </div>
+
+              {/* Section Actions rapides */}
+              <div className="bg-gradient-to-r from-primary to-primary/90 rounded-xl p-5 text-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                    <i className="fa-solid fa-location-crosshairs text-white text-lg"></i>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-wide">Navigation rapide</h4>
+                    <p className="text-xs text-white/80">Outils et informations</p>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <button className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg py-3 px-6 text-sm font-medium hover:bg-white/30 transition-all duration-300 flex items-center justify-center gap-2">
+                    <i className="fa-solid fa-map"></i>
+                    <span>Voir sur le plan</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

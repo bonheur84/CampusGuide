@@ -113,92 +113,140 @@ const Clubs = () => {
 
       {clubSelectionne && (
         <>
-          <div className="fixed inset-0 bg-slate-900/40 z-3000" onClick={() => setClubSelectionne(null)}></div>
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-[20px] w-[90%] max-w-[520px] z-4000 overflow-hidden shadow-[0_25px_50px_rgba(0,0,0,0.2)] anime-apparition">
-            <div className="relative h-32 overflow-hidden bg-gradient-to-br from-primary to-primary/80">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-3000" onClick={() => setClubSelectionne(null)}></div>
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl w-[95%] max-w-[600px] z-4000 overflow-hidden shadow-2xl anime-apparition border border-gray-100">
+            {/* Header avec dégradé moderne */}
+            <div className="relative h-40 overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/70">
+              <div className="absolute inset-0 bg-black/10"></div>
               <div className="absolute inset-0 flex items-center justify-center">
-                <i className={`fa-solid ${clubSelectionne.icone} text-white text-5xl opacity-80`}></i>
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                  <i className={`fa-solid ${clubSelectionne.icone} text-white text-3xl`}></i>
+                </div>
               </div>
               <button
-                className="absolute top-3 right-3 bg-white/90 border-none w-8 h-8 rounded-lg cursor-pointer text-sm text-slate-600 flex items-center justify-center hover:bg-white transition-all duration-200 shadow-md"
+                className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm border border-white/30 w-10 h-10 rounded-xl cursor-pointer text-white flex items-center justify-center hover:bg-white/30 transition-all duration-300"
                 onClick={() => setClubSelectionne(null)}
               >
-                <i className="fa-solid fa-times"></i>
+                <i className="fa-solid fa-times text-lg"></i>
               </button>
-              <div className="absolute bottom-4 left-5 text-white">
-                <h3 className="text-xl font-bold drop-shadow">{clubSelectionne.nom}</h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[11px] font-black px-2 py-0.5 rounded-md bg-white/20 text-white">
+              <div className="absolute bottom-4 left-6 text-white">
+                <h3 className="text-2xl font-bold mb-2">{clubSelectionne.nom}</h3>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold px-3 py-1 bg-white/25 backdrop-blur-sm rounded-full text-white">
                     {clubSelectionne.categorieNom}
                   </span>
-                  <span className="text-[11px] text-white/80 flex items-center gap-1">
-                    <i className="fa-solid fa-user-group text-[10px]"></i> {clubSelectionne.membres} membres
+                  <span className="text-xs text-white/90 flex items-center gap-1">
+                    <i className="fa-solid fa-users"></i> {clubSelectionne.membres} membres
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
-              <div>
-                <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <i className="fa-solid fa-circle-info text-primary"></i> Description
-                </p>
-                <p className="text-[13.5px] text-slate-600 leading-relaxed">
+            {/* Contenu principal */}
+            <div className="p-6 space-y-6">
+              {/* Section Description */}
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <i className="fa-solid fa-info-circle text-primary text-sm"></i>
+                  </div>
+                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Description</h4>
+                </div>
+                <p className="text-gray-600 leading-relaxed text-sm">
                   {clubSelectionne.description}
                 </p>
               </div>
 
-              <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                <p className="text-xs font-black text-slate-600 uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <i className="fa-solid fa-user-tie text-slate-600"></i> Administrateur
-                </p>
-                <div className="space-y-2">
-                  <p className="text-[13px] text-slate-600 leading-relaxed">
-                    <span className="font-semibold">Nom:</span> {clubSelectionne.administrateurNom || 'Bonheur Nzau'}
-                  </p>
-                  <p className="text-[13px] text-slate-600 leading-relaxed">
-                    <span className="font-semibold">Promotion:</span> {clubSelectionne.administrateurPromotion || 'L2 informatique'}
-                  </p>
-                  <p className="text-[13px] text-slate-600 leading-relaxed">
-                    <span className="font-semibold">Email:</span> {clubSelectionne.administrateurEmail || 'nzaubonheur84@gmail.com'}
-                  </p>
-                  <p className="text-[13px] text-slate-600 leading-relaxed">
-                    <span className="font-semibold">Téléphone:</span> {clubSelectionne.administrateurTelephone || '0975079756'}
-                  </p>
+              {/* Section Administrateur avec design moderne */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <i className="fa-solid fa-user-tie text-white text-sm"></i>
+                  </div>
+                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Administrateur</h4>
                 </div>
-              </div>
-
-              <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
-                <p className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <i className="fa-solid fa-graduation-cap text-emerald-600"></i> Compétences acquises
-                </p>
-                <div className="space-y-2">
-                  {clubSelectionne.competences ? (
-                    <div className="flex flex-wrap gap-2">
-                      {(typeof clubSelectionne.competences === 'string' ? JSON.parse(clubSelectionne.competences) : clubSelectionne.competences).map((competence, index) => (
-                        <span key={index} className="text-[11px] font-medium px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-md">
-                          {competence}
-                        </span>
-                      ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                      <i className="fa-solid fa-user text-blue-500 text-sm"></i>
                     </div>
-                  ) : (
-                    <p className="text-[13px] text-slate-600 leading-relaxed">
-                      En rejoignant ce club, vous développerez des compétences en leadership, travail d'équipe, communication et gestion de projet.
-                    </p>
-                  )}
+                    <div>
+                      <p className="text-xs text-gray-500">Nom</p>
+                      <p className="text-sm font-semibold text-gray-900">{clubSelectionne.administrateurNom || 'Bonheur Nzau'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                      <i className="fa-solid fa-graduation-cap text-blue-500 text-sm"></i>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Promotion</p>
+                      <p className="text-sm font-semibold text-gray-900">{clubSelectionne.administrateurPromotion || 'L2 informatique'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                      <i className="fa-solid fa-envelope text-blue-500 text-sm"></i>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Email</p>
+                      <p className="text-sm font-semibold text-gray-900 truncate">{clubSelectionne.administrateurEmail || 'nzaubonheur84@gmail.com'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                      <i className="fa-solid fa-phone text-blue-500 text-sm"></i>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Téléphone</p>
+                      <p className="text-sm font-semibold text-gray-900">{clubSelectionne.administrateurTelephone || '0975079756'}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="bg-sky-50 rounded-xl p-4 border border-sky-100">
-                <p className="text-xs font-black text-primary uppercase tracking-widest mb-2 flex items-center gap-2">
-                  <i className="fa-solid fa-users"></i> Rejoindre le club
-                </p>
-                <p className="text-[13px] text-slate-600 leading-relaxed mb-3">
-                  Intéressé(e) par ce club ? Cliquez sur le bouton ci-dessous pour rejoindre le groupe WhatsApp et participer aux activités.
+              {/* Section Compétences avec design moderne */}
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-100">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                    <i className="fa-solid fa-graduation-cap text-white text-sm"></i>
+                  </div>
+                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Compétences acquises</h4>
+                </div>
+                {clubSelectionne.competences ? (
+                  <div className="flex flex-wrap gap-2">
+                    {(typeof clubSelectionne.competences === 'string' ? JSON.parse(clubSelectionne.competences) : clubSelectionne.competences).map((competence, index) => (
+                      <span key={index} className="px-3 py-1.5 bg-white text-emerald-700 rounded-lg text-xs font-medium shadow-sm border border-emerald-200 hover:bg-emerald-50 transition-colors duration-200">
+                        {competence}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 text-sm leading-relaxed bg-white p-3 rounded-lg">
+                    En rejoignant ce club, vous développerez des compétences en leadership, travail d'équipe, communication et gestion de projet.
+                  </p>
+                )}
+              </div>
+
+              {/* Section Action avec design moderne */}
+              <div className="bg-gradient-to-r from-primary to-primary/90 rounded-xl p-5 text-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                    <i className="fa-solid fa-users text-white"></i>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-wide">Rejoindre le club</h4>
+                    <p className="text-xs text-white/80">Devenez membre de la communauté</p>
+                  </div>
+                </div>
+                <p className="text-sm text-white/90 mb-4 leading-relaxed">
+                  Prêt(e) à rejoindre l'aventure ? Cliquez sur le bouton ci-dessous pour intégrer le groupe WhatsApp et participer aux activités du club.
                 </p>
                 <a href={clubSelectionne.lien} target="_blank" rel="noopener noreferrer" className="no-underline" onClick={() => { rejoindreClub(clubSelectionne.id); setClubSelectionne(null); }}>
-                  <button className="w-full py-3 rounded-xl text-white text-[14px] font-bold transition-all hover:brightness-95 flex items-center justify-center gap-2 shadow-lg bg-primary hover:shadow-xl">
-                    <i className="fa-brands fa-whatsapp"></i> Rejoindre sur WhatsApp
+                  <button className="w-full py-3.5 bg-white text-primary rounded-xl font-bold text-sm transition-all hover:scale-[1.02] hover:shadow-xl flex items-center justify-center gap-3">
+                    <i className="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Rejoindre sur WhatsApp</span>
+                    <i className="fa-solid fa-arrow-right text-xs"></i>
                   </button>
                 </a>
               </div>

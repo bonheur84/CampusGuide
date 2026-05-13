@@ -6,247 +6,457 @@ const Campus = () => {
 
   const batiments = [
     {
-      nom: 'Batiment Principal (UNH 1)',
+      nom: 'UNH 1',
       icon: 'fa-building',
       salles: [
+        // Rez-de-chaussée
         {
-          nom: 'Salle 412/B',
-          etage: '2ème étage',
+          nom: 'Salle 402 A',
+          etage: 'Rez-de-chaussée',
           type: 'Salle',
           typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 30,
-          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif et de 30 places assises. Idéale pour les cours magistraux et les travaux de groupe.',
-          itineraire: 'Entrez par l\'accueil principal, prenez l\'escalier central jusqu\'au 2ème étage. Tournez à droite dans le couloir B, la salle 412 se trouve au fond à gauche.',
-          photo: '/assets/auditoire (3).jpg'
+          capacite: 122,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 1, la salle 402 A se trouve à droite de l\'entrée principale.',
+          photo: '/assets/402A.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
-          nom: 'Salle 411/B',
-          etage: '2ème étage',
+          nom: 'Salle 401 A',
+          etage: 'Rez-de-chaussée',
           type: 'Salle',
           typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 25,
-          description: 'Salle de cours standard avec tableau blanc et vidéoprojecteur. Lumière naturelle abondante grâce à ses grandes fenêtres donnant sur la cour intérieure.',
-          itineraire: 'Entrez par l\'accueil principal, prenez l\'escalier central jusqu\'au 2ème étage. Tournez à droite dans le couloir B, la salle 411 est en face de la salle 412.',
-          photo: '/assets/auditoire (2).jpg'
-        },
-        {
-          nom: 'Salle 421 A/B',
-          etage: '3ème étage',
-          type: 'Salle',
-          typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 40,
-          description: 'Salle modulable en deux espaces (A et B) grâce à une cloison amovible. Idéale pour les séances de TD en petits groupes ou les examens.',
-          itineraire: 'Montez jusqu\'au 3ème étage par l\'escalier ou l\'ascenseur. Au niveau de l\'aile A/B, la salle 421 est la première à gauche en sortant de l\'ascenseur.',
-          photo: '/assets/auditoire (3).jpg'
-        },
-        {
-          nom: 'Salle 422 A/B',
-          etage: '3ème étage',
-          type: 'Salle',
-          typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 40,
-          description: 'Salle jumelle de la 421 A/B. Équipée de mobilier modulable pour faciliter le travail en équipe. Connexion Wi-Fi haut débit disponible.',
-          itineraire: 'Montez jusqu\'au 3ème étage. La salle 422 se trouve juste à côté de la 421, dans le même couloir à gauche.',
-          photo: '/assets/auditoire (3).jpg'
-        },
-        {
-          nom: 'Salle 402/A',
-          etage: '1er étage',
-          type: 'Salle',
-          typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 28,
-          description: 'Salle de cours du premier étage, aile A. Équipée d\'un écran de projection et d\'un système audio pour les présentations et soutennances.',
-          itineraire: 'Depuis l\'accueil, montez d\'un étage par l\'escalier principal. Tournez à gauche dans le couloir A. La salle 402 est la deuxième porte sur votre droite.',
-          photo: '/assets/auditoire (3).jpg'
-        },
-        {
-          nom: 'Salle 401/A',
-          etage: '1er étage',
-          type: 'Salle',
-          typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 28,
-          description: 'Première salle du couloir A au 1er étage. Vue panoramique sur l\'entrée du campus. Très appréciée pour les TD de petits groupes.',
-          itineraire: 'Depuis l\'accueil, montez d\'un étage. Tournez à gauche dans le couloir A. La salle 401 est la première porte sur votre droite, juste après les toilettes.',
-          photo: '/assets/auditoire (2).jpg'
-        },
-        {
-          nom: 'Bureau du recteur',
-          etage: 'Dernier étage',
-          type: 'Bureau',
-          typeCouleur: 'bg-orange-50 text-orange-600',
-          capacite: 10,
-          description: 'Bureau administratif du Doyen de l\'université. Accès sur rendez-vous uniquement. Espace chaleureux et solennel, utilisé pour les réunions importantes et les réceptions officielles.',
-          itineraire: 'Prenez l\'ascenseur principal jusqu\'au dernier étage. Traversez le hall vitré, le bureau du Doyen est la grande porte en bois au fond du couloir central.',
-          photo: '/assets/auditoire (5).jpg'
-        },
-        {
-          nom: 'Bibliothèque',
-          etage: '2ème étage',
-          type: 'Bibliothèque',
-          typeCouleur: 'bg-purple-50 text-purple-600',
-          capacite: 100,
-          description: 'Grande bibliothèque universitaire avec plus de 5 000 ouvrages spécialisés. Espace de lecture silencieux, accès Internet haut débit, prises électriques à chaque place et service d\'impression.',
-          itineraire: 'Montez au 2ème étage par l\'escalier ou l\'ascenseur. La bibliothèque est signalée par un panneau violet. Grande double porte vitrée visible depuis le palier.',
-          photo: '/assets/biblio.jpg'
-        },
-        {
-          nom: 'Salle 421',
-          etage: '3ème étage',
-          type: 'Salle',
-          typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 35,
-          description: 'Salle de cours standard au 3ème étage. Entièrement rénovée en 2023 avec du nouveau mobilier ergonomique et un tableau blanc interactif dernière génération.',
-          itineraire: 'Montez au 3ème étage. Le couloir principal mène directement à la salle 421, identifiable par son numéro en rouge sur la porte.',
-          photo: '/assets/auditoire (2).jpg'
-        },
-        {
-          nom: 'Labo Informatique',
-          etage: '1er étage',
-          type: 'Laboratoire',
-          typeCouleur: 'bg-green-50 text-green-600',
-          capacite: 25,
-          description: 'Laboratoire informatique doté de 25 postes de travail récents sous Windows et Linux. Logiciels disponibles : suite Office, Visual Studio Code, MATLAB, SPSS, et outils de développement web.',
-          itineraire: 'Depuis l\'accueil, prenez le couloir de droite au 1er étage. Le Labo Informatique est signalé par une porte verte avec un logo ordinateur. Accès par badge étudiant.',
-          photo: '/assets/auditoire (8).jpg'
+          capacite: 122,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 1, la salle 401 A se trouve à gauche de l\'entrée principale.',
+          photo: '/assets/401A.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
           nom: 'Salle Justine',
-          etage: '1er étage',
+          etage: 'Rez-de-chaussée',
           type: 'Salle',
           typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 20,
-          description: 'Salle polyvalente baptisée « Justine » en hommage à une ancienne étudiante méritante. Utilisée pour les ateliers créatifs, séminaires et réunions de clubs étudiants.',
-          itineraire: 'Depuis l\'entrée, suivez les panneaux au 1er étage en direction de l\'aile gauche. La salle Justine est reconnaissable à la plaque commémorative dorée sur la porte.',
-          photo: '/assets/auditoire (4).jpg'
+          capacite: 105,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 1, la salle Justine est située au fond du couloir central.',
+          photo: '/assets/justine.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
-          nom: "Bureau d'Administration",
-          etage: '1er étage',
-          type: 'Bureau',
-          typeCouleur: 'bg-orange-50 text-orange-600',
-          capacite: 8,
-          description: 'Bureau administratif principal de l\'université. Gestion des inscriptions, paiements, attestations et délivrance des documents officiels. Ouvert du lundi au vendredi de 8h à 16h.',
-          itineraire: 'Depuis l\'entrée principale, le Bureau d\'Administration est la première grande pièce à droite au 1er étage. Signalé par un panneau orange « Administration ».',
-          photo: '/assets/auditoire (5).jpg'
+          nom: 'Salle 402 B',
+          etage: 'Rez-de-chaussée',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 122,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 1, la salle 402 B est adjacente à la 402 A.',
+          photo: '/assets/402B.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
-          nom: 'Hall',
+          nom: 'Salle 401 B',
+          etage: 'Rez-de-chaussée',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 122,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 1, la salle 401 B est adjacente à la 401 A.',
+          photo: '/assets/401B.jpg',
+          icon: 'fa-chalkboard-user'
+        },
+        // 1er niveau
+        {
+          nom: 'Salle 412 A/B',
+          etage: '1er niveau',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 125,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 1, prenez l\'escalier principal. La salle 412 A/B est à gauche.',
+          photo: '/assets/412.jpg',
+          icon: 'fa-chalkboard-user'
+        },
+        {
+          nom: 'Salle 411 A/B',
+          etage: '1er niveau',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 125,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 1, prenez l\'escalier principal. La salle 411 A/B est à droite.',
+          photo: '/assets/411.jpg',
+          icon: 'fa-chalkboard-user'
+        },
+        {
+          nom: 'Bibliothèque (Salle Mantini)',
+          etage: '1er niveau',
+          type: 'Bibliothèque',
+          typeCouleur: 'bg-purple-50 text-purple-600',
+          capacite: 200,
+          description: 'Grande bibliothèque universitaire avec plus de 5 000 ouvrages spécialisés. Espace de lecture silencieux, accès Internet haut débit, prises électriques à chaque place et service d\'impression.',
+          itineraire: 'Au 1er niveau de l\'UNH 1, la bibliothèque se trouve au fond du couloir central.',
+          photo: '/assets/biblio.jpg',
+          icon: 'fa-book'
+        },
+        // 2ème niveau
+        {
+          nom: 'Salle 422 A/B',
+          etage: '2ème niveau',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 130,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 1, prenez l\'escalier principal. La salle 422 A/B est à gauche.',
+          photo: '/assets/422.jpg',
+          icon: 'fa-chalkboard-user'
+        },
+        {
+          nom: 'Salle 421 A/B',
+          etage: '2ème niveau',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 130,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 1, prenez l\'escalier principal. La salle 421 A/B est à droite.',
+          photo: '/assets/421.jpg',
+          icon: 'fa-chalkboard-user'
+        },
+        {
+          nom: 'Labo informatique (Salle Mwak)',
+          etage: '2ème niveau',
+          type: 'Laboratoire',
+          typeCouleur: 'bg-green-50 text-green-600',
+          capacite: 110,
+          description: 'Laboratoire informatique doté de 25 postes de travail récents sous Windows et Linux. Logiciels disponibles : suite Office, Visual Studio Code, MATLAB, SPSS, et outils de développement web.',
+          itineraire: 'Au 2ème niveau de l\'UNH 1, le labo informatique se trouve au fond du couloir de droite.',
+          photo: '/assets/IMG-20260513-WA0019.jpg',
+          icon: 'fa-laptop-code'
+        }
+      ]
+    },
+    {
+      nom: 'UNH 2',
+      icon: 'fa-building',
+      salles: [
+        // Rez-de-chaussée
+        {
+          nom: 'Préau',
           etage: 'Rez-de-chaussée',
           type: 'Espace commun',
           typeCouleur: 'bg-slate-50 text-slate-600',
-          capacite: 200,
-          description: 'Grand hall d\'entrée du bâtiment principal. Point de rencontre central avec un panneau d\'affichage des cours, distributeurs automatiques et espace d\'attente confortable.',
-          itineraire: 'Le hall est directement accessible depuis l\'entrée principale du bâtiment. Impossible de le manquer dès l\'entrée.',
-          photo: '/assets/auditoire (6).jpg'
-        }
-      ]
-    },
-    {
-      nom: 'Bâtiment 2 (UNH 1)',
-      icon: 'fa-building',
-      salles: [
+          capacite: 150,
+          description: 'Espace couvert polyvalent utilisé pour les événements, les pauses et les activités étudiantes.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 2, le préau est directement accessible depuis l\'entrée principale.',
+          photo: '/assets/preau.jpg',
+          icon: 'fa-umbrella'
+        },
+        // 1er niveau
         {
-          nom: 'Salle 431',
-          etage: '2ème étage',
+          nom: 'Salle 433',
+          etage: '1er niveau',
           type: 'Salle',
           typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 32,
-          description: 'Salle de cours du bâtiment 2, aile 4. Équipée d\'un vidéoprojecteur et d\'un système de climatisation. Utilisée principalement pour les cours de médecine et sciences.',
-          itineraire: 'Entrez dans le bâtiment 2 par l\'entrée latérale. Montez au 2ème étage. La salle 431 est la première porte à gauche dans le couloir 4.',
-          photo: '/assets/auditoire (3).jpg'
+          capacite: 122,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 2, la salle 433 se trouve à gauche de l\'escalier.',
+          photo: '/assets/433.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
           nom: 'Salle 432',
-          etage: '2ème étage',
+          etage: '1er niveau',
           type: 'Salle',
           typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 32,
-          description: 'Salle adjacente à la 431. Utilisée alternativement pour les travaux dirigés. Dispose d\'une connexion réseau câblée pour les expériences nécessitant une haute stabilité.',
-          itineraire: 'Même accès que la salle 431. La salle 432 est juste à côté, deuxième porte à gauche dans le couloir 4.',
-          photo: '/assets/auditoire (2).jpg'
+          capacite: 122,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 2, la salle 432 est adjacente à la 433.',
+          photo: '/assets/432.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
-          nom: 'Salle 433',
-          etage: '2ème étage',
+          nom: 'Salle 431',
+          etage: '1er niveau',
           type: 'Salle',
           typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 30,
-          description: 'Salle de cours légèrement plus petite, idéale pour les groupes de TD et les examens oraux. Vue sur la cour intérieure du bâtiment 2.',
-          itineraire: 'Depuis le couloir 4 au 2ème étage du bâtiment 2, la salle 433 est la troisième porte à gauche après l\'escalier.',
-          photo: '/assets/auditoire (2).jpg'
+          capacite: 122,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 2, la salle 431 est à droite de l\'escalier.',
+          photo: '/assets/431.jpg',
+          icon: 'fa-chalkboard-user'
         },
+        // 2ème niveau
         {
-          nom: 'Salle 443 — Centre de Simulation Médicale',
-          etage: '3ème étage',
-          type: 'Laboratoire',
-          typeCouleur: 'bg-green-50 text-green-600',
-          capacite: 20,
-          description: 'Centre de simulation médicale haute-fidélité équipé de mannequins simulateurs, moniteurs vitaux et matériel chirurgical pédagogique. Réservé aux étudiants en médecine sous supervision.',
-          itineraire: 'Montez au 3ème étage du bâtiment 2. La salle 443 est au bout du couloir médical, identifiable par la porte sécurisée bleue et le panneau « Simulation ».',
-          photo: '/assets/auditoire (2).jpg'
+          nom: 'Salle 441',
+          etage: '2ème niveau',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 115,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 2, la salle 441 se trouve à gauche de l\'escalier.',
+          photo: '/assets/441.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
           nom: 'Salle 442',
-          etage: '3ème étage',
+          etage: '2ème niveau',
           type: 'Salle',
           typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 28,
-          description: 'Salle de cours du 3ème étage utilisée pour les séminaires de recherche et les présentations de mémoires. Équipée d\'un système audio-visuel complet.',
-          itineraire: 'Montez au 3ème étage du bâtiment 2 par l\'escalier de secours ou l\'ascenseur. La salle 442 est à mi-chemin dans le couloir principal, côté fenêtre.',
-          photo: '/assets/auditoire (2).jpg'
+          capacite: 115,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 2, la salle 442 est adjacente à la 441.',
+          photo: '/assets/442.jpg',
+          icon: 'fa-chalkboard-user'
         },
         {
-          nom: 'Salle 441',
-          etage: '3ème étage',
-          type: 'Salle',
-          typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 28,
-          description: 'Salle de cours standard au 3ème étage. Bien éclairée naturellement, dispose d\'un tableau blanc magnétique et de supports pour présenter des affiches scientifiques.',
-          itineraire: 'Au 3ème étage du bâtiment 2, la salle 441 est la première porte du couloir, juste en face de l\'escalier.',
-          photo: '/assets/auditoire (2).jpg'
+          nom: 'Salle 443 (Centre de simulation médicale)',
+          etage: '2ème niveau',
+          type: 'Laboratoire',
+          typeCouleur: 'bg-green-50 text-green-600',
+          capacite: 105,
+          description: 'Centre de simulation médicale haute-fidélité équipé de mannequins simulateurs, moniteurs vitaux et matériel chirurgical pédagogique. Réservé aux étudiants en médecine sous supervision.',
+          itineraire: 'Au 2ème niveau de l\'UNH 2, le centre de simulation médicale se trouve au fond du couloir de droite.',
+          photo: '/assets/443.jpg',
+          icon: 'fa-heart-pulse'
         }
       ]
     },
     {
-      nom: 'Batiment 3 (UNH 2)',
+      nom: 'UNH 3',
       icon: 'fa-building',
       salles: [
+        // Rez-de-chaussée
         {
-          nom: 'Labo Chimie',
+          nom: 'Atelier d\'architecture 2',
+          etage: 'Rez-de-chaussée',
+          type: 'Atelier',
+          typeCouleur: 'bg-amber-50 text-amber-600',
+          capacite: 110,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 3, l\'atelier d\'architecture 2 se trouve à gauche de l\'entrée.',
+          photo: '/assets/atelier-architecture-2.jpg',
+          icon: 'fa-drafting-compass'
+        },
+        {
+          nom: 'Labo microbiologie alimentaire',
           etage: 'Rez-de-chaussée',
           type: 'Laboratoire',
           typeCouleur: 'bg-green-50 text-green-600',
-          capacite: 20,
-          description: 'Laboratoire de chimie entièrement équipé : hottes aspirantes, paillasses en céramique, réactifs classifiés et matériel de sécurité (douche d\'urgence, extincteurs). Accès en blouse et lunettes obligatoires.',
-          itineraire: 'Le Labo Chimie est situé au rez-de-chaussée du bâtiment 3 (UNH 2). Entrez par l\'accès latéral réservé aux laboratoires, signalé par un panneau « Danger – Produits chimiques ».',
-          photo: '/assets/auditoire (7).jpg'
+          capacite: 108,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 3, le labo de microbiologie alimentaire se trouve au fond du couloir.',
+          photo: '/assets/labo-micro-alimentaire.jpg',
+          icon: 'fa-microscope'
         },
         {
-          nom: 'Salle de Conférence',
-          etage: '2ème étage',
-          type: 'Salle',
-          typeCouleur: 'bg-blue-50 text-primary',
-          capacite: 60,
-          description: 'Salle de conférence professionnelle avec table ovale centrale, système de visioconférence intégré et écran panoramique. Idéale pour les réunions internationales et les soutenances de thèse.',
-          itineraire: 'Montez au 2ème étage du bâtiment 3 par l\'ascenseur vitré. La salle de conférence est au bout du couloir principal, identifiable par ses grandes portes vitrées.',
-          photo: '/assets/auditoire.jpg'
+          nom: 'Atelier génie civil',
+          etage: 'Rez-de-chaussée',
+          type: 'Atelier',
+          typeCouleur: 'bg-amber-50 text-amber-600',
+          capacite: 105,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 3, l\'atelier génie civil se trouve à droite de l\'entrée.',
+          photo: '/assets/altelier-genie-ciil.jpg',
+          icon: 'fa-helmet-safety'
+        },
+        {
+          nom: 'Labo de technologie alimentaire',
+          etage: 'Rez-de-chaussée',
+          type: 'Laboratoire',
+          typeCouleur: 'bg-green-50 text-green-600',
+          capacite: 108,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 3, le labo de technologie alimentaire est adjacent au labo de microbiologie.',
+          photo: '/assets/labo-technologie-alimentaire.jpg',
+          icon: 'fa-flask'
+        },
+        {
+          nom: 'Mini-brasserie',
+          etage: 'Rez-de-chaussée',
+          type: 'Laboratoire',
+          typeCouleur: 'bg-green-50 text-green-600',
+          capacite: 200,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 3, la mini-brasserie se trouve dans l\'aile ouest.',
+          photo: '/assets/IMG-20260513-WA0034.jpg',
+          icon: 'fa-beer-mug-empty'
+        },
+        {
+          nom: 'Labo chimie',
+          etage: 'Rez-de-chaussée',
+          type: 'Laboratoire',
+          typeCouleur: 'bg-green-50 text-green-600',
+          capacite: 105,
+          description: 'Laboratoire de chimie entièrement équipé : hottes aspirantes, paillasses en céramique, réactifs classifiés et matériel de sécurité (douche d\'urgence, extincteurs). Accès en blouse et lunettes obligatoires.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 3, le labo chimie se trouve dans l\'aile est.',
+          photo: '/assets/labo-chimie.jpg',
+          icon: 'fa-flask-vial'
+        },
+        {
+          nom: 'Labo biochimie alimentaire',
+          etage: 'Rez-de-chaussée',
+          type: 'Laboratoire',
+          typeCouleur: 'bg-green-50 text-green-600',
+          capacite: 108,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 3, le labo biochimie alimentaire est adjacent au labo chimie.',
+          photo: '/assets/labo-biochimie-alimentaire.jpg',
+          icon: 'fa-dna'
+        },
+        // 1er niveau
+        {
+          nom: 'Local 6',
+          etage: '1er niveau',
+          type: 'Local',
+          typeCouleur: 'bg-gray-50 text-gray-600',
+          capacite: 200,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 3, le local 6 se trouve à gauche de l\'escalier.',
+          photo: '/assets/local6.jpg',
+          icon: 'fa-door-closed'
+        },
+        {
+          nom: 'Restaurant',
+          etage: '1er niveau',
+          type: 'Restauration',
+          typeCouleur: 'bg-orange-50 text-orange-600',
+          capacite: 140,
+          description: 'Restaurant universitaire avec self-service, espace de repas convivial et variété de plats.',
+          itineraire: 'Au 1er niveau de l\'UNH 3, le restaurant se trouve au centre du bâtiment.',
+          photo: '/assets/restaurant.jpg',
+          icon: 'fa-utensils'
+        },
+        {
+          nom: 'Cuisine',
+          etage: '1er niveau',
+          type: 'Cuisine',
+          typeCouleur: 'bg-red-50 text-red-600',
+          capacite: 108,
+          description: 'Cuisine professionnelle équipée pour la préparation des repas du restaurant universitaire.',
+          itineraire: 'Au 1er niveau de l\'UNH 3, la cuisine est adjacente au restaurant.',
+          photo: '/assets/cuisine.jpg',
+          icon: 'fa-fire-burner'
+        },
+        {
+          nom: 'Local 1',
+          etage: '1er niveau',
+          type: 'Local',
+          typeCouleur: 'bg-gray-50 text-gray-600',
+          capacite: 200,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 3, le local 1 se trouve à droite de l\'escalier.',
+          photo: '/assets/local1.jpg',
+          icon: 'fa-door-closed'
+        },
+        // 2ème niveau
+        {
+          nom: 'Local 2',
+          etage: '2ème niveau',
+          type: 'Local',
+          typeCouleur: 'bg-gray-50 text-gray-600',
+          capacite: 200,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 3, le local 2 se trouve à gauche de l\'escalier.',
+          photo: '/assets/local2.jpg',
+          icon: 'fa-door-closed'
+        },
+        {
+          nom: 'Local 3',
+          etage: '2ème niveau',
+          type: 'Local',
+          typeCouleur: 'bg-gray-50 text-gray-600',
+          capacite: 200,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 3, le local 3 est adjacent au local 2.',
+          photo: '/assets/local3.jpg',
+          icon: 'fa-door-closed'
+        },
+        {
+          nom: 'Local 4',
+          etage: '2ème niveau',
+          type: 'Local',
+          typeCouleur: 'bg-gray-50 text-gray-600',
+          capacite: 200,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 3, le local 4 se trouve au centre du couloir.',
+          photo: '/assets/local4.jpg',
+          icon: 'fa-door-closed'
+        },
+        {
+          nom: 'Local 5',
+          etage: '2ème niveau',
+          type: 'Local',
+          typeCouleur: 'bg-gray-50 text-gray-600',
+          capacite: 200,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 3, le local 5 se trouve à droite de l\'escalier.',
+          photo: '/assets/local5.jpg',
+          icon: 'fa-door-closed'
+        },
+        {
+          nom: 'Labo de génie électrique',
+          etage: '2ème niveau',
+          type: 'Laboratoire',
+          typeCouleur: 'bg-green-50 text-green-600',
+          capacite: 105,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 3, le labo de génie électrique se trouve au fond du couloir.',
+          photo: '/assets/labo-genie-electrique.jpg',
+          icon: 'fa-bolt'
         }
       ]
     },
     {
-      nom: 'Batiment 4 (UNH 3)',
+      nom: 'UNH 4',
       icon: 'fa-building',
       salles: [
+        // Rez-de-chaussée
+        {
+          nom: 'UNH 4-A',
+          etage: 'Rez-de-chaussée',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 130,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au rez-de-chaussée de l\'UNH 4, la salle UNH 4-A se trouve à gauche de l\'entrée.',
+          photo: '/assets/unh-a.jpg',
+          icon: 'fa-chalkboard-user'
+        },
+        // 1er niveau
+        {
+          nom: 'UNH 4-C',
+          etage: '1er niveau',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 130,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 1er niveau de l\'UNH 4, la salle UNH 4-C se trouve à gauche de l\'escalier.',
+          photo: '/assets/unh-c.jpg',
+          icon: 'fa-chalkboard-user'
+        },
+        // 2ème niveau
+        {
+          nom: 'UNH 4-B',
+          etage: '2ème niveau',
+          type: 'Salle',
+          typeCouleur: 'bg-blue-50 text-primary',
+          capacite: 130,
+          description: 'Grande salle de cours polyvalente équipée d\'un projecteur HD, d\'un tableau interactif. Idéale pour les cours et les travaux de groupe.',
+          itineraire: 'Au 2ème niveau de l\'UNH 4, la salle UNH 4-B se trouve à droite de l\'escalier.',
+          photo: '/assets/IMG-20260513-WA0050.jpg',
+          icon: 'fa-chalkboard-user'
+        },
         {
           nom: 'Amphithéâtre',
-          etage: 'Rez-de-chaussée',
+          etage: '2ème niveau',
           type: 'Amphi',
           typeCouleur: 'bg-red-50 text-red-600',
           capacite: 180,
-          description: 'Amphithéâtre secondaire du campus, plus intime que celui du bâtiment 3. Capacité de 180 places avec système de projection 4K et sonorisation Dolby. Utilisé pour les cours en amphi des filières science et droit.',
-          itineraire: 'Depuis l\'entrée du bâtiment 4, descendez le hall d\'entrée jusqu\'au fond. L\'amphithéâtre est signalé par un panneau rouge et des portes insonorisées à double battant.',
-          photo: '/assets/auditoire (2).jpg'
-        },
+          description: 'Amphithéâtre principal du campus avec capacité de 180 places, système de projection 4K et sonorisation Dolby. Utilisé pour les cours magistraux, conférences et événements officiels.',
+          itineraire: 'Au 2ème niveau de l\'UNH 4, l\'amphithéâtre se trouve au fond du couloir central.',
+          photo: '/assets/amphi.jpg',
+          icon: 'fa-users-line'
+        }
       ]
     }
   ];
@@ -335,7 +545,7 @@ const Campus = () => {
                 src={salleSelectionnee.photo}
                 alt={salleSelectionnee.nom}
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                onError={(e) => { e.target.src = 'https://picsum.photos/seed/campus-room/800/400'; }}
+                onError={(e) => { e.target.src = '/assets/402A.jpg'; }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
               
@@ -406,25 +616,6 @@ const Campus = () => {
                   <p className="text-gray-700 leading-relaxed text-sm">
                     {salleSelectionnee.itineraire || `Prenez l'escalier ou l'ascenseur vers le ${salleSelectionnee.etage}. La salle se trouve dans l'aile correspondante du bâtiment.`}
                   </p>
-                </div>
-              </div>
-
-              {/* Section Actions rapides */}
-              <div className="bg-gradient-to-r from-primary to-primary/90 rounded-xl p-5 text-white">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                    <i className="fa-solid fa-location-crosshairs text-white text-lg"></i>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold uppercase tracking-wide">Navigation rapide</h4>
-                    <p className="text-xs text-white/80">Outils et informations</p>
-                  </div>
-                </div>
-                <div className="flex justify-center">
-                  <button className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg py-3 px-6 text-sm font-medium hover:bg-white/30 transition-all duration-300 flex items-center justify-center gap-2">
-                    <i className="fa-solid fa-map"></i>
-                    <span>Voir sur le plan</span>
-                  </button>
                 </div>
               </div>
             </div>

@@ -18,6 +18,8 @@ export const FournisseurUtilisateur = ({ children }) => {
   const [photoProfil, setPhotoProfil] = useState(null);
   const [notifications, setNotifications] = useState([]);
 
+  const [pret, setPret] = useState(false);
+
   useEffect(() => {
     const userSauvegarde = localStorage.getItem('campus_user');
     if (userSauvegarde) {
@@ -34,6 +36,7 @@ export const FournisseurUtilisateur = ({ children }) => {
         setPhotoProfil(photoSauvegardee);
       }
     }
+    setPret(true);
   }, []);
 
   useEffect(() => {
@@ -144,6 +147,7 @@ export const FournisseurUtilisateur = ({ children }) => {
       utilisateur,
       photoProfil,
       notifications,
+      pret,
       mettreAJourUtilisateur,
       mettreAJourPhoto,
       ajouterNotification,

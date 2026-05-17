@@ -1,10 +1,13 @@
-﻿import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 const Navigation = () => {
   const [menuOuvert, setMenuOuvert] = useState(false);
-  const { utilisateur, photoProfil, notifications } = useContext(ContexteUtilisateur);
+  const { utilisateur, photoProfil, notifications, mettreAJourUtilisateur } = useContext(ContexteUtilisateur);
   const emplacement = useLocation();
+
+  if (emplacement.pathname === '/login') return null;
+
   const nbNonLues = notifications?.filter(n => !n.lue).length || 0;
   const estActif = (chemin) => emplacement.pathname === chemin;
   const NavLink = ({ to, icon, label }) => (

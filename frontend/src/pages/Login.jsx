@@ -1,15 +1,26 @@
-﻿import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { apiUtilisateurs } from '../api';
 const Login = () => {
+  const { utilisateur, mettreAJourUtilisateur, pret } = useContext(ContexteUtilisateur);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (pret && utilisateur.id) {
+      if (utilisateur.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [pret, utilisateur, navigate]);
+
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState(null);
   const [messageSucces, setMessageSucces] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  const { mettreAJourUtilisateur } = useContext(ContexteUtilisateur);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErreur(null); // Effacer l'erreur quand l'utilisateur tape

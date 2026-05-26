@@ -122,26 +122,6 @@ let utilisateurs = [
   },
 ];
 
-// ─── Messages ─────────────────────────────────────────────────────────────────
-let messages = [
-  {
-    id: 'm1',
-    expediteurId: 'u1',
-    destinataireId: '1', // Jean Dupont mentor
-    contenu: 'Bonjour, pouvez-vous m\'aider avec React ?',
-    lu: false,
-    createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'm2',
-    expediteurId: '1',
-    destinataireId: 'u1',
-    contenu: 'Bien sûr ! Quel problème rencontres-tu ?',
-    lu: true,
-    createdAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-  },
-];
-
 // ─── Notifications ────────────────────────────────────────────────────────────
 let notifications = [
   {

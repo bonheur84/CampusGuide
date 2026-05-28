@@ -84,7 +84,7 @@ const Login = () => {
       <div 
         className="flex-none md:flex-1 relative flex items-center justify-center min-h-[250px] md:min-h-screen" 
         style={{ 
-          backgroundImage: "url('public/assets/universite-nouveaux-horizons.jpg')", 
+          backgroundImage: "url('/assets/universite-nouveaux-horizons.jpg')", 
           backgroundSize: 'cover', 
           backgroundPosition: 'center', 
           backgroundRepeat: 'no-repeat' 
@@ -96,7 +96,7 @@ const Login = () => {
         <div className="bg-white rounded-3xl p-8 md:px-12 md:py-12 w-full max-w-[460px] shadow-[0_20px_60px_rgba(58,176,255,0.12)] anime-apparition scale-90 md:scale-95">
           <div className="text-center mb-6 md:mb-8">
             <div>
-              <img src="public/assets/loo campusuide.png" alt="Logo UNH Campus" className="w-100 h-27 mx-auto mb-4 rounded-xl" />
+              <img src="/assets/loo campusuide.png" alt="Logo UNH Campus" className="w-100 h-27 mx-auto mb-4 rounded-xl" />
             </div>
             <h2 className="text-2xl md:text-[28px] font-extrabold text-slate-800">
             Connexion

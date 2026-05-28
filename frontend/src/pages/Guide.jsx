@@ -92,7 +92,7 @@ const Guide = () => {
              <video 
                 controls 
                 className="w-full h-full object-cover"
-                poster="assets/Uniersite-Nouveaux-Horizons.jpg"
+                poster="/assets/Universite-Nouveaux-Horizons.jpg"
               >
                 <source src="/assets/horizons.mp4" type="video/mp4" />
                 Votre navigateur ne supporte pas la lecture de vidéos.

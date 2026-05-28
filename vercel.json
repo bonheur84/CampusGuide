@@ -18,6 +18,10 @@
     {
       "source": "/api/:path*",
       "destination": "/backend/api/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
   ]
 }

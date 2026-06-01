@@ -538,16 +538,16 @@ const Campus = () => {
       {salleSelectionnee && (
         <>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-3000" onClick={() => setSalleSelectionnee(null)}></div>
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl w-[95%] max-w-[600px] z-4000 overflow-hidden shadow-2xl anime-apparition border border-gray-100">
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl w-[95%] max-w-[760px] z-4000 overflow-hidden shadow-2xl anime-apparition border border-gray-100">
             {/* Header avec image et overlay moderne */}
-            <div className="relative h-56 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+            <div className="relative h-80 overflow-hidden bg-slate-100">
               <img
                 src={salleSelectionnee.photo}
                 alt={salleSelectionnee.nom}
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                className="w-full h-full object-contain transition-all duration-500"
                 onError={(e) => { e.target.src = '/assets/402A.jpg'; }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
               
               {/* Bouton de fermeture moderne */}
               <button

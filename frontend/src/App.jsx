@@ -40,7 +40,7 @@ const RouteProtegee = ({ children }) => {
 const ContenuApp = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-bg">
+      <div className="min-h-screen bg-white">
         <Navigation />
         <main className="pt-0">
           <Routes>
@@ -61,7 +61,7 @@ const ContenuApp = () => {
             <Route path="/admin" element={<RouteProtegee><AdminDashboard /></RouteProtegee>} />
           </Routes>
         </main>
-        <footer className="py-10 text-center text-slate-400 text-sm border-t border-slate-200 mt-20">
+        <footer className="py-10 text-center text-slate-400 text-sm border-t border-slate-200 mt-10">
           <p> 2024 CampusGuide - Université Nouveaux Horizons</p>
         </footer>
       </div>

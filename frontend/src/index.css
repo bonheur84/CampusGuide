@@ -9,7 +9,7 @@
 
 @layer base {
   body {
-    @apply font-inter bg-bg text-slate-800;
+    @apply font-inter bg-white text-slate-800;
   }
 }
 

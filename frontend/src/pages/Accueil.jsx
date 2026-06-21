@@ -65,7 +65,7 @@ const Accueil = () => {
             </div>
           </div>
           <div className="w-full max-w-[1200px] mx-auto mt-10 md:mt-15">
-            <img src="/assets/Universite-Nouveaux-Horizons.jpg" alt="Campus" className="w-full rounded-[20px] shadow-[0_20px_40px_rgba(0,0,0,0.1)] object-cover h-[250px] md:h-auto" />
+            <img src="../public/assets/universite-nouveaux-horizons" alt="Campus" className="w-full rounded-[20px] shadow-[0_20px_40px_rgba(0,0,0,0.1)] object-cover h-[250px] md:h-auto" />
           </div>
         </section>
         <section className="mt-12 rounded-[20px] py-12 md:py-24 text-center bg-white">

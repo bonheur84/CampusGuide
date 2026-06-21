@@ -49,3 +49,9 @@ app.listen(PORT, () => {
   console.log(`CampusGuide API demarree sur http://localhost:${PORT}`);
   console.log(`Base de donnees: ${process.env.DB_NAME || 'campusguide'}`);
 });
+
+
+
+
+
+

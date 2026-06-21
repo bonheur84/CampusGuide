@@ -5,6 +5,39 @@ const pool = require('../config/database');
 const { authentifier, genererToken } = require('../middleware/auth');
 const { v4: uuidv4 } = require('uuid');
 
+router.post('/inscription', async (req, res) => {
+  const { email, motDePasse, nom, filiere, annee } = req.body;
+
+  if (!email || !motDePasse || !nom) {
+    return res.status(400).json({ success: false, erreur: 'Email, mot de passe et nom requis' });
+  }
+
+  try {
+    const [existing] = await pool.query('SELECT * FROM utilisateurs WHERE email = ?', [email]);
+    if (existing.length > 0) {
+      return res.status(400).json({ success: false, erreur: 'Email déjà utilisé' });
+    }
+
+    const hash = await bcrypt.hash(motDePasse, 12);
+    const id = uuidv4();
+
+    await pool.query(
+      'INSERT INTO utilisateurs (id, email, mot_de_passe, nom, filiere, annee, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [id, email, hash, nom, filiere || null, annee || null, 'etudiant']
+    );
+
+    const [rows] = await pool.query('SELECT * FROM utilisateurs WHERE id = ?', [id]);
+    const utilisateur = rows[0];
+    const token = genererToken(utilisateur);
+    const { mot_de_passe, ...utilisateurSansMdp } = utilisateur;
+
+    res.json({ success: true, message: 'Inscription réussie', utilisateur: utilisateurSansMdp, token });
+  } catch (err) {
+    console.error('Inscription:', err.message);
+    res.status(500).json({ success: false, erreur: 'Erreur serveur lors de l\'inscription' });
+  }
+});
+
 router.post('/connexion', async (req, res) => {
   const { email, motDePasse } = req.body;
 
@@ -138,3 +171,5 @@ router.delete('/:id', authentifier, async (req, res) => {
 });
 
 module.exports = router;
+
+

@@ -39,6 +39,46 @@ const AdminDashboard = () => {
     const promotionMatch = filterPromotion === 'tous' || u.annee === filterPromotion || u.promotion === filterPromotion;
     return filiereMatch && promotionMatch;
   });
+
+  // Statistiques précédentes pour calculer les pourcentages
+  const [previousStats, setPreviousStats] = useState({
+    utilisateurs: 0,
+    mentors: 0,
+    evenements: 0,
+    mentorsActifs: 0
+  });
+
+  // Calculer le pourcentage de changement
+  const calculatePercentageChange = (current, previous) => {
+    if (previous === 0) return 0;
+    const change = ((current - previous) / previous) * 100;
+    return Math.round(change * 10) / 10; // Arrondir à 1 décimale
+  };
+
+  // Sauvegarder les statistiques actuelles pour la prochaine fois
+  useEffect(() => {
+    if (!chargement && utilisateurs.length > 0) {
+      const stats = {
+        utilisateurs: utilisateurs.length,
+        mentors: mentors.length,
+        evenements: evenements.length,
+        mentorsActifs: mentors.filter(m => m.status === 'approuve').length
+      };
+      localStorage.setItem('campus_admin_previous_stats', JSON.stringify(stats));
+    }
+  }, [chargement, utilisateurs, mentors, evenements]);
+
+  // Charger les statistiques précédentes
+  useEffect(() => {
+    const saved = localStorage.getItem('campus_admin_previous_stats');
+    if (saved) {
+      try {
+        setPreviousStats(JSON.parse(saved));
+      } catch (e) {
+        console.error('Erreur lors du chargement des statistiques précédentes');
+      }
+    }
+  }, []);
   useEffect(() => {
     if (utilisateur.role !== 'admin') return;
     chargerDonnees();
@@ -523,7 +563,15 @@ const AdminDashboard = () => {
                       <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                         <i className="fa-solid fa-users text-blue-600 text-xl"></i>
                       </div>
-                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+12%</span>
+                      {(() => {
+                        const change = calculatePercentageChange(utilisateurs.length, previousStats.utilisateurs);
+                        const isPositive = change >= 0;
+                        return (
+                          <span className={`text-xs font-bold ${isPositive ? 'text-green-500 bg-green-50' : 'text-red-500 bg-red-50'} px-2 py-1 rounded-full`}>
+                            {isPositive ? '+' : ''}{change}%
+                          </span>
+                        );
+                      })()}
                     </div>
                     <h3 className="text-3xl font-bold text-slate-900 mb-1">{utilisateurs.length}</h3>
                     <p className="text-sm text-slate-500">Utilisateurs</p>
@@ -534,7 +582,15 @@ const AdminDashboard = () => {
                       <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
                         <i className="fa-solid fa-people-arrows text-purple-600 text-xl"></i>
                       </div>
-                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+8%</span>
+                      {(() => {
+                        const change = calculatePercentageChange(mentors.length, previousStats.mentors);
+                        const isPositive = change >= 0;
+                        return (
+                          <span className={`text-xs font-bold ${isPositive ? 'text-green-500 bg-green-50' : 'text-red-500 bg-red-50'} px-2 py-1 rounded-full`}>
+                            {isPositive ? '+' : ''}{change}%
+                          </span>
+                        );
+                      })()}
                     </div>
                     <h3 className="text-3xl font-bold text-slate-900 mb-1">{mentors.length}</h3>
                     <p className="text-sm text-slate-500">Mentors</p>
@@ -545,7 +601,15 @@ const AdminDashboard = () => {
                       <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
                         <i className="fa-solid fa-calendar text-amber-600 text-xl"></i>
                       </div>
-                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+5%</span>
+                      {(() => {
+                        const change = calculatePercentageChange(evenements.length, previousStats.evenements);
+                        const isPositive = change >= 0;
+                        return (
+                          <span className={`text-xs font-bold ${isPositive ? 'text-green-500 bg-green-50' : 'text-red-500 bg-red-50'} px-2 py-1 rounded-full`}>
+                            {isPositive ? '+' : ''}{change}%
+                          </span>
+                        );
+                      })()}
                     </div>
                     <h3 className="text-3xl font-bold text-slate-900 mb-1">{evenements.length}</h3>
                     <p className="text-sm text-slate-500">Événements</p>
@@ -556,7 +620,16 @@ const AdminDashboard = () => {
                       <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
                         <i className="fa-solid fa-check-circle text-emerald-600 text-xl"></i>
                       </div>
-                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+15%</span>
+                      {(() => {
+                        const mentorsActifs = mentors.filter(m => m.status === 'approuve').length;
+                        const change = calculatePercentageChange(mentorsActifs, previousStats.mentorsActifs);
+                        const isPositive = change >= 0;
+                        return (
+                          <span className={`text-xs font-bold ${isPositive ? 'text-green-500 bg-green-50' : 'text-red-500 bg-red-50'} px-2 py-1 rounded-full`}>
+                            {isPositive ? '+' : ''}{change}%
+                          </span>
+                        );
+                      })()}
                     </div>
                     <h3 className="text-3xl font-bold text-slate-900 mb-1">{mentors.filter(m => m.status === 'approuve').length}</h3>
                     <p className="text-sm text-slate-500">Mentors Actifs</p>

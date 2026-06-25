@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { apiUtilisateurs } from '../api';
+import LazyImage from '../components/ui/LazyImage';
+import ratingService from '../services/RatingService';
 
 const Profil = () => {
   const { utilisateur, photoProfil, mettreAJourUtilisateur, mettreAJourPhoto, ajouterNotification } = useContext(ContexteUtilisateur);
@@ -19,6 +21,8 @@ const Profil = () => {
     nouveau: '',
     confirmation: ''
   });
+
+  const [statsRating, setStatsRating] = useState(null);
 
   const getDefaultPhoto = (userId) => {
     const photoOptions = [
@@ -44,6 +48,12 @@ const Profil = () => {
       setFiliere(utilisateur.filiere || 'informatique');
       setPromotion(utilisateur.promotion || 'L1');
       setPhotoAperçu(photoProfil || utilisateur.avatar || getDefaultPhoto(utilisateur.id));
+      
+      // Charger les statistiques de rating si l'utilisateur est un mentor
+      if (utilisateur.role === 'mentor' || utilisateur.estMentor) {
+        const stats = ratingService.getStatistiques('mentor', utilisateur.id);
+        setStatsRating(stats);
+      }
     }
   }, [utilisateur, photoProfil]);
 
@@ -156,7 +166,7 @@ const Profil = () => {
                 <div className="flex flex-col items-center gap-4 mb-8">
                   <div className="w-32 h-32 rounded-full bg-slate-50 border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center text-slate-300 relative group transition-all hover:border-primary">
                     {photoAperçu ? (
-                      <img src={photoAperçu} className="w-full h-full object-cover" alt="Avatar" />
+                      <LazyImage src={photoAperçu} alt="Avatar" className="w-full h-full object-cover" />
                     ) : (
                       <i className="fa-solid fa-user text-4xl"></i>
                     )}
@@ -212,6 +222,96 @@ const Profil = () => {
                 </button>
               </form>
             </div>
+
+            {/* Section Ratings pour les mentors */}
+            {(utilisateur.role === 'mentor' || utilisateur.estMentor) && statsRating && (
+              <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-sm">
+                <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                  <i className="fa-solid fa-star text-amber-500"></i> Mes Évaluations
+                </h2>
+                <p className="text-slate-600 text-sm mb-6">Avis et notes des étudiants que vous avez accompagnés</p>
+                
+                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-100">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="text-xs font-bold text-slate-600 uppercase mb-1">Note moyenne</p>
+                      <div className="flex items-center gap-3">
+                        <span className="text-4xl font-bold text-amber-500">{statsRating.moyenne}/5</span>
+                        {statsRating.nombreVotes > 0 && (
+                          <span className="text-sm text-slate-500">
+                            ({statsRating.nombreVotes} vote{statsRating.nombreVotes > 1 ? 's' : ''})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center">
+                      <i className="fa-solid fa-star text-amber-500 text-3xl"></i>
+                    </div>
+                  </div>
+                  
+                  {statsRating.nombreVotes > 0 && (
+                    <>
+                      <div className="mt-4 pt-4 border-t border-amber-200">
+                        <p className="text-xs font-bold text-slate-600 uppercase mb-3">Distribution des notes</p>
+                        <div className="space-y-2">
+                          {[5, 4, 3, 2, 1].map(etoile => (
+                            <div key={etoile} className="flex items-center gap-3">
+                              <span className="text-xs font-bold text-slate-600 w-4">{etoile}</span>
+                              <i className="fa-solid fa-star text-amber-400 text-xs"></i>
+                              <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
+                                <div 
+                                  className="h-full bg-amber-400 rounded-full transition-all duration-500"
+                                  style={{ width: `${statsRating.nombreVotes > 0 ? (statsRating.distribution[etoile] / statsRating.nombreVotes) * 100 : 0}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-xs text-slate-500 w-8 text-right">{statsRating.distribution[etoile]}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="mt-4 pt-4 border-t border-amber-200">
+                        <p className="text-xs font-bold text-slate-600 uppercase mb-2">Détails des votes</p>
+                        <div className="space-y-2 max-h-40 overflow-y-auto">
+                          {statsRating.ratings.map((rating, index) => (
+                            <div key={index} className="bg-white rounded-lg p-3 flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+                                  <i className="fa-solid fa-user text-slate-400 text-xs"></i>
+                                </div>
+                                <div>
+                                  <p className="text-xs font-bold text-slate-700">Utilisateur {rating.userId.slice(0, 8)}</p>
+                                  <p className="text-[10px] text-slate-400">
+                                    {new Date(rating.date).toLocaleDateString('fr-FR')}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                {[1, 2, 3, 4, 5].map(star => (
+                                  <i 
+                                    key={star} 
+                                    className={`fa-solid fa-star text-xs ${star <= rating.valeur ? 'text-amber-400' : 'text-slate-300'}`}
+                                  ></i>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  
+                  {statsRating.nombreVotes === 0 && (
+                    <div className="text-center py-6">
+                      <i className="fa-solid fa-star-half-stroke text-amber-300 text-4xl mb-3"></i>
+                      <p className="text-sm text-slate-600">Aucune évaluation pour le moment</p>
+                      <p className="text-xs text-slate-400 mt-1">Les étudiants pourront vous noter après avoir été accompagnés</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
           </div>
 
         </div>

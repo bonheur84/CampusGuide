@@ -5,6 +5,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { apiMentors } from '../api';
+import ratingService from '../services/RatingService';
 const ProfilMentor = () => {
   const { utilisateur } = useContext(ContexteUtilisateur);
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ const ProfilMentor = () => {
   const [chargement, setChargement] = useState(false);
   const [succes, setSucces] = useState(false);
   const [erreur, setErreur] = useState(null);
+  const [mentorId, setMentorId] = useState(null);
+  const [ratingStats, setRatingStats] = useState({ moyenne: 0, totalVotes: 0 });
   // Charger les informations du mentor connecté
   useEffect(() => {
     const chargerProfil = async () => {
@@ -29,6 +32,7 @@ const ProfilMentor = () => {
         const data = await apiMentors.getMesProfils();
         if (data.success && data.mentors.length > 0) {
           const mentor = data.mentors[0];
+          setMentorId(mentor.id);
           setFormData({
             nom: mentor.nom || '',
             filiere: mentor.filiere || '',
@@ -40,6 +44,9 @@ const ProfilMentor = () => {
           if (mentor.photo) {
             setPhotoPreview(mentor.photo);
           }
+          // Charger les statistiques de rating
+          const stats = await ratingService.getStatistiques('mentor', mentor.id);
+          setRatingStats(stats);
         }
       } catch (err) {
         setErreur('Erreur lors du chargement du profil');
@@ -136,6 +143,26 @@ const ProfilMentor = () => {
             Gérez vos informations et votre numéro WhatsApp pour que les étudiants puissent vous contacter facilement.
           </p>
         </div>
+
+        {/* Rating Statistics */}
+        {mentorId && (
+          <div className="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+            <h2 className="text-xl font-bold text-slate-900 mb-4">
+              <i className="fas fa-star text-amber-500 mr-2"></i>
+              Mes Évaluations
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-slate-50 rounded-xl p-4 text-center">
+                <div className="text-3xl font-bold text-amber-500 mb-1">{ratingStats.moyenne}/5</div>
+                <div className="text-sm text-slate-600">Note moyenne</div>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-4 text-center">
+                <div className="text-3xl font-bold text-primary mb-1">{ratingStats.nombreVotes}</div>
+                <div className="text-sm text-slate-600">Évaluation{ratingStats.nombreVotes > 1 ? 's' : ''}</div>
+              </div>
+            </div>
+          </div>
+        )}
         {succes && (
           <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-6">
             <div className="flex items-center gap-3">

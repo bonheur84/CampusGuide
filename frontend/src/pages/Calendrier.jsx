@@ -2,6 +2,8 @@
 import { apiEvenements } from '../api';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { useAlerte } from '../components/AlertePersonnalisee';
+import SkeletonEvent from '../components/ui/SkeletonEvent';
+import exportService from '../services/ExportService';
 const Calendrier = () => {
   const { utilisateur } = useContext(ContexteUtilisateur);
   const estAdmin = utilisateur?.role === 'admin';
@@ -228,15 +230,23 @@ const Calendrier = () => {
             <i className="fa-solid fa-calendar-star text-primary"></i> Événements à venir
             <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">En direct</span>
           </h2>
-          {estAdmin && (
-            <button
-              onClick={() => setFormulaireOuvert(v => !v)}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-all shadow-md"
+          <div className="flex gap-2">
+            <button 
+              onClick={() => exportService.exportCalendrierToPDF(evenementsServeur, 'calendrier')}
+              className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-sm font-bold hover:bg-slate-200 transition-all flex items-center gap-2"
             >
-              <i className={`fa-solid ${formulaireOuvert ? 'fa-times' : 'fa-plus'}`}></i>
-              {formulaireOuvert ? 'Annuler' : 'Créer un événement'}
+              <i className="fas fa-file-pdf"></i> Export PDF
             </button>
-          )}
+            {estAdmin && (
+              <button
+                onClick={() => setFormulaireOuvert(v => !v)}
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-all shadow-md"
+              >
+                <i className={`fa-solid ${formulaireOuvert ? 'fa-times' : 'fa-plus'}`}></i>
+                {formulaireOuvert ? 'Annuler' : 'Créer un événement'}
+              </button>
+            )}
+          </div>
         </div>
         {estAdmin && formulaireOuvert && (
           <form onSubmit={creerEvenement} className="bg-white border border-primary/20 rounded-2xl p-6 mb-8 shadow-lg space-y-4">
@@ -300,9 +310,8 @@ const Calendrier = () => {
           </form>
         )}
         {chargementEv ? (
-          <div className="text-center py-10 text-slate-400">
-            <i className="fas fa-spinner fa-spin text-2xl text-primary mb-2"></i>
-            <p className="text-sm">Chargement depuis le serveur...</p>
+          <div className="space-y-4">
+            {[1, 2, 3, 4, 5].map((i) => <SkeletonEvent key={i} />)}
           </div>
         ) : evenementsServeur.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

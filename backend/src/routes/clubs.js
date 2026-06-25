@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/database');
+const { authentifier } = require('../middleware/auth');
+const { v4: uuidv4 } = require('uuid');
 
 router.get('/', async (req, res) => {
   try {
@@ -20,6 +22,17 @@ router.get('/', async (req, res) => {
 
     const [rows] = await pool.query(sql, params);
     const clubs = rows.map(normaliserClub);
+
+    // Ajouter les statistiques de rating pour chaque club
+    for (const club of clubs) {
+      const [stats] = await pool.query(
+        'SELECT AVG(note) as moyenne, COUNT(*) as total FROM ratings_clubs WHERE club_id = ?',
+        [club.id]
+      );
+      club.moyenneRating = parseFloat(stats[0].moyenne || 0).toFixed(1);
+      club.totalVotes = stats[0].total;
+    }
+
     res.json({ success: true, total: clubs.length, clubs });
   } catch (err) {
     console.error('GET /clubs:', err.message);
@@ -87,6 +100,75 @@ router.post('/:id/rejoindre', async (req, res) => {
     const [rows] = await pool.query('SELECT membres FROM clubs WHERE id = ?', [req.params.id]);
     if (rows.length === 0) return res.status(404).json({ success: false, erreur: 'Club introuvable' });
     res.json({ success: true, membres: rows[0].membres });
+  } catch (err) {
+    res.status(500).json({ success: false, erreur: 'Erreur serveur' });
+  }
+});
+
+// POST /api/clubs/:id/rate — Noter un club
+router.post('/:id/rate', authentifier, async (req, res) => {
+  const { note } = req.body;
+  if (!note || note < 1 || note > 5) {
+    return res.status(400).json({ success: false, erreur: 'La note doit être entre 1 et 5' });
+  }
+
+  try {
+    const ratingId = uuidv4();
+    
+    // Insérer ou mettre à jour le vote (ON DUPLICATE KEY UPDATE)
+    await pool.query(
+      `INSERT INTO ratings_clubs (id, club_id, utilisateur_id, note) VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE note = ?, updated_at = CURRENT_TIMESTAMP`,
+      [ratingId, req.params.id, req.utilisateur.id, note, note]
+    );
+
+    // Récupérer les statistiques mises à jour
+    const [stats] = await pool.query(
+      'SELECT AVG(note) as moyenne, COUNT(*) as total FROM ratings_clubs WHERE club_id = ?',
+      [req.params.id]
+    );
+
+    res.json({ 
+      success: true, 
+      moyenne: parseFloat(stats[0].moyenne || 0).toFixed(1),
+      totalVotes: stats[0].total
+    });
+  } catch (err) {
+    console.error('Erreur notation:', err);
+    res.status(500).json({ success: false, erreur: 'Erreur serveur' });
+  }
+});
+
+// GET /api/clubs/:id/ratings — Obtenir les statistiques de notation
+router.get('/:id/ratings', async (req, res) => {
+  try {
+    const [stats] = await pool.query(
+      'SELECT AVG(note) as moyenne, COUNT(*) as total FROM ratings_clubs WHERE club_id = ?',
+      [req.params.id]
+    );
+
+    res.json({ 
+      success: true, 
+      moyenne: parseFloat(stats[0].moyenne || 0).toFixed(1),
+      totalVotes: stats[0].total
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, erreur: 'Erreur serveur' });
+  }
+});
+
+// GET /api/clubs/:id/my-rating — Obtenir la note de l'utilisateur connecté
+router.get('/:id/my-rating', authentifier, async (req, res) => {
+  try {
+    const [rating] = await pool.query(
+      'SELECT note FROM ratings_clubs WHERE club_id = ? AND utilisateur_id = ?',
+      [req.params.id, req.utilisateur.id]
+    );
+
+    res.json({ 
+      success: true, 
+      note: rating.length > 0 ? rating[0].note : null
+    });
   } catch (err) {
     res.status(500).json({ success: false, erreur: 'Erreur serveur' });
   }

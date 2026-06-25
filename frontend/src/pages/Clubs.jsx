@@ -1,5 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { apiClubs } from '../api';
+import SkeletonCard from '../components/ui/SkeletonCard';
+import StarRating from '../components/ui/StarRating';
+import Tooltip from '../components/ui/Tooltip';
+import LazyImage from '../components/ui/LazyImage';
 const Clubs = () => {
   const [recherche, setRecherche] = useState('');
   const [filtreActif, setFiltreActif] = useState('tous');
@@ -61,7 +65,9 @@ const Clubs = () => {
           Découvrez les clubs étudiants de l'université et trouvez celui qui correspond à vos passions.
         </p>
         <div className="bg-white w-full max-w-[600px] px-5 py-4 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center gap-3 border border-slate-200 mb-8 mx-auto">
-          <i className="fa-solid fa-search text-slate-400 text-lg"></i>
+          <Tooltip content="Rechercher un club">
+            <i className="fa-solid fa-search text-slate-400 text-lg"></i>
+          </Tooltip>
           <input 
             type="text" 
             placeholder="Rechercher un club par son nom..." 
@@ -72,6 +78,9 @@ const Clubs = () => {
         </div>
       </section>
       <section className="max-w-[1200px] mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-sm font-black text-slate-400 uppercase tracking-[2px]">Tous les Clubs</h2>
+        </div>
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           {categories.map(cat => (
             <button 
@@ -84,9 +93,8 @@ const Clubs = () => {
           ))}
         </div>
         {chargement && (
-          <div className="text-center py-20 text-slate-400">
-            <i className="fas fa-spinner fa-spin text-4xl mb-4 text-primary"></i>
-            <p className="text-lg font-medium">Chargement des clubs depuis le serveur...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => <SkeletonCard key={i} />)}
           </div>
         )}
         {erreur && !chargement && (
@@ -283,6 +291,9 @@ const CarteClub = ({ club, index, onRejoindre, onClick }) => {
         <div>
           <h3 className="font-bold text-slate-900 text-lg leading-tight">{club.nom}</h3>
           <p className="text-[11px] text-slate-400 uppercase font-black tracking-widest mt-1">{club.categorieNom}</p>
+          <div className="mt-2">
+            <StarRating itemId={club.id} itemType="club" initialRating={club.moyenneRating || club.note || 0} size="sm" showCount={true} />
+          </div>
         </div>
       </div>
       <div className="mb-6 flex-1">

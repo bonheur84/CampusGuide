@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { apiUtilisateurs, apiMentors, apiEvenements } from '../api';
+import { apiUtilisateurs, apiMentors, apiClubs, apiEvenements } from '../api';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAlerte } from '../components/AlertePersonnalisee';
+import SkeletonTable from '../components/ui/SkeletonTable';
+import Tooltip from '../components/ui/Tooltip';
+import exportService from '../services/ExportService';
+import ratingService from '../services/RatingService';
 const AdminDashboard = () => {
   const { utilisateur, ajouterNotification } = useContext(ContexteUtilisateur);
-  const [tab, setTab] = useState('utilisateurs'); // 'utilisateurs', 'mentors', 'evenements'
+  const [tab, setTab] = useState('utilisateurs'); // 'utilisateurs', 'mentors', 'clubs', 'evenements', 'analytics'
   const [utilisateurs, setUtilisateurs] = useState([]);
   const [mentors, setMentors] = useState([]);
+  const [clubs, setClubs] = useState([]);
+  const [evenements, setEvenements] = useState([]);
   const [chargement, setChargement] = useState(true);
   const { montrerAlerte, AlerteComponent } = useAlerte();
   // Formulaire événement
@@ -21,12 +27,16 @@ const AdminDashboard = () => {
   const chargerDonnees = async () => {
     setChargement(true);
     try {
-      const [dataU, dataM] = await Promise.all([
+      const [dataU, dataM, dataC, dataE] = await Promise.all([
         apiUtilisateurs.adminGetTous(),
-        apiMentors.getAll({ tous: 'true' })
+        apiMentors.getAll({ tous: 'true' }),
+        apiClubs.getAll(),
+        apiEvenements.getAll()
       ]);
       setUtilisateurs(dataU.utilisateurs);
       setMentors(dataM.mentors);
+      setClubs(dataC.clubs);
+      setEvenements(dataE.evenements || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -99,14 +109,44 @@ const AdminDashboard = () => {
         <header className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Tableau de Bord <span className="text-primary">Admin</span></h1>
           <p className="text-slate-500">Gérez les comptes, validez les mentors et organisez les événements.</p>
+          <div className="flex gap-3 mt-4">
+            <Tooltip content="Exporter la liste des utilisateurs en CSV">
+              <button 
+                onClick={() => exportService.exportToCSV(utilisateurs, 'utilisateurs')}
+                className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-sm font-bold hover:bg-slate-200 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-file-csv"></i> Export CSV Utilisateurs
+              </button>
+            </Tooltip>
+            <Tooltip content="Exporter la liste des mentors en CSV">
+              <button 
+                onClick={() => exportService.exportToCSV(mentors, 'mentors')}
+                className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-sm font-bold hover:bg-slate-200 transition-all flex items-center gap-2"
+              >
+                <i className="fas fa-file-csv"></i> Export CSV Mentors
+              </button>
+            </Tooltip>
+          </div>
         </header>
         <div className="flex gap-4 mb-8 border-b border-slate-200">
-           <button onClick={() => setTab('utilisateurs')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'utilisateurs' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Utilisateurs</button>
-           <button onClick={() => setTab('mentors')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'mentors' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Demandes Mentors</button>
-           <button onClick={() => setTab('evenements')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'evenements' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Nouvel Événement</button>
+           <Tooltip content="Gérer les utilisateurs">
+             <button onClick={() => setTab('utilisateurs')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'utilisateurs' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Utilisateurs</button>
+           </Tooltip>
+           <Tooltip content="Valider les demandes de mentors">
+             <button onClick={() => setTab('mentors')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'mentors' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Demandes Mentors</button>
+           </Tooltip>
+           <Tooltip content="Gérer les clubs">
+             <button onClick={() => setTab('clubs')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'clubs' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Clubs</button>
+           </Tooltip>
+           <Tooltip content="Créer un nouvel événement">
+             <button onClick={() => setTab('evenements')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'evenements' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Nouvel Événement</button>
+           </Tooltip>
+           <Tooltip content="Voir les statistiques avancées">
+             <button onClick={() => setTab('analytics')} className={`pb-3 px-2 font-bold text-sm transition-all border-b-2 ${tab === 'analytics' ? 'border-primary text-primary' : 'border-transparent text-slate-400'}`}>Analytics</button>
+           </Tooltip>
         </div>
         {chargement ? (
-          <div className="py-20 text-center"><i className="fas fa-spinner fa-spin text-3xl text-primary"></i></div>
+          <SkeletonTable rows={5} />
         ) : (
           <AnimatePresence mode="wait">
             {tab === 'utilisateurs' && (
@@ -151,7 +191,8 @@ const AdminDashboard = () => {
             {tab === 'mentors' && (
               <motion.section key="m" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {mentors.length > 0 ? (
-                  mentors.map(m => (
+                  mentors.map(m => {
+                    return (
                     <div key={m.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex gap-6 relative group">
                       <button 
                         onClick={() => handleDeleteMentor(m.id, m.nom)}
@@ -174,7 +215,20 @@ const AdminDashboard = () => {
                           </span>
                         </div>
                         <p className="text-primary text-xs font-bold mb-2 uppercase">{m.filiere} • {m.annee}</p>
-                        <p className="text-slate-500 text-sm line-clamp-2 mb-4 italic">"{m.bio}"</p>
+                        <p className="text-slate-500 text-sm line-clamp-2 mb-3 italic">"{m.bio}"</p>
+                        
+                        {/* Rating Statistics */}
+                        <div className="bg-slate-50 rounded-xl p-3 mb-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs font-bold text-slate-600 uppercase">Note moyenne</span>
+                            <span className="text-lg font-bold text-amber-500">{m.moyenneRating || 0}/5</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-500">Nombre de votes</span>
+                            <span className="text-sm font-semibold text-slate-700">{m.totalVotes || 0} étudiant{m.totalVotes > 1 ? 's' : ''}</span>
+                          </div>
+                        </div>
+                        
                         {m.status === 'en_attente' && (
                           <div className="flex gap-2">
                              <button onClick={() => handleUpdateStatus(m.id, 'approuve')} className="flex-1 py-2 bg-emerald-500 text-white rounded-xl text-xs font-bold hover:bg-emerald-600 transition-all">Accepter</button>
@@ -186,9 +240,51 @@ const AdminDashboard = () => {
                         )}
                       </div>
                     </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <div className="col-span-2 py-20 text-center bg-white rounded-3xl border border-dashed border-slate-200 text-slate-400 font-medium">Aucun mentor répertorié.</div>
+                )}
+              </motion.section>
+            )}
+            {tab === 'clubs' && (
+              <motion.section key="c" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {clubs.length > 0 ? (
+                  clubs.map(c => (
+                    <div key={c.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex gap-6 relative group">
+                      <div className="w-20 h-20 bg-slate-100 rounded-2xl shrink-0 overflow-hidden flex items-center justify-center">
+                        <i className={`fa-solid ${c.icone} text-3xl text-slate-400`}></i>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-bold text-slate-900 text-lg">{c.nom}</h3>
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase bg-primary/10 text-primary`}>
+                            {c.categorieNom}
+                          </span>
+                        </div>
+                        <p className="text-slate-500 text-sm line-clamp-2 mb-3 italic">"{c.description}"</p>
+                        
+                        {/* Rating Statistics */}
+                        <div className="bg-slate-50 rounded-xl p-3 mb-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs font-bold text-slate-600 uppercase">Note moyenne</span>
+                            <span className="text-lg font-bold text-amber-500">{c.moyenneRating || 0}/5</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-500">Nombre de votes</span>
+                            <span className="text-sm font-semibold text-slate-700">{c.totalVotes || 0} étudiant{c.totalVotes > 1 ? 's' : ''}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-xs text-slate-400">
+                          <i className="fa-solid fa-users"></i>
+                          <span>{c.membres} membres</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-2 py-20 text-center bg-white rounded-3xl border border-dashed border-slate-200 text-slate-400 font-medium">Aucun club répertorié.</div>
                 )}
               </motion.section>
             )}
@@ -230,6 +326,133 @@ const AdminDashboard = () => {
                   </div>
                   <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-bold shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all">Créer l'événement</button>
                 </form>
+              </motion.section>
+            )}
+            {tab === 'analytics' && (
+              <motion.section key="a" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
+                {/* KPI Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                        <i className="fa-solid fa-users text-blue-600 text-xl"></i>
+                      </div>
+                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+12%</span>
+                    </div>
+                    <h3 className="text-3xl font-bold text-slate-900 mb-1">{utilisateurs.length}</h3>
+                    <p className="text-sm text-slate-500">Utilisateurs</p>
+                  </div>
+
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                        <i className="fa-solid fa-people-arrows text-purple-600 text-xl"></i>
+                      </div>
+                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+8%</span>
+                    </div>
+                    <h3 className="text-3xl font-bold text-slate-900 mb-1">{mentors.length}</h3>
+                    <p className="text-sm text-slate-500">Mentors</p>
+                  </div>
+
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                        <i className="fa-solid fa-calendar text-amber-600 text-xl"></i>
+                      </div>
+                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+5%</span>
+                    </div>
+                    <h3 className="text-3xl font-bold text-slate-900 mb-1">{evenements.length}</h3>
+                    <p className="text-sm text-slate-500">Événements</p>
+                  </div>
+
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <i className="fa-solid fa-check-circle text-emerald-600 text-xl"></i>
+                      </div>
+                      <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+15%</span>
+                    </div>
+                    <h3 className="text-3xl font-bold text-slate-900 mb-1">{mentors.filter(m => m.status === 'approuve').length}</h3>
+                    <p className="text-sm text-slate-500">Mentors Actifs</p>
+                  </div>
+                </div>
+
+                {/* Simple Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Mentors by Status */}
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-6">Statut des Mentors</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium text-slate-600">Approuvés</span>
+                          <span className="text-sm font-bold text-slate-900">{mentors.filter(m => m.status === 'approuve').length}</span>
+                        </div>
+                        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                            style={{ width: `${mentors.length > 0 ? (mentors.filter(m => m.status === 'approuve').length / mentors.length) * 100 : 0}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium text-slate-600">En attente</span>
+                          <span className="text-sm font-bold text-slate-900">{mentors.filter(m => m.status === 'en_attente').length}</span>
+                        </div>
+                        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-amber-500 rounded-full transition-all duration-500"
+                            style={{ width: `${mentors.length > 0 ? (mentors.filter(m => m.status === 'en_attente').length / mentors.length) * 100 : 0}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium text-slate-600">Rejetés</span>
+                          <span className="text-sm font-bold text-slate-900">{mentors.filter(m => m.status === 'rejete').length}</span>
+                        </div>
+                        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-red-500 rounded-full transition-all duration-500"
+                            style={{ width: `${mentors.length > 0 ? (mentors.filter(m => m.status === 'rejete').length / mentors.length) * 100 : 0}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Users by Role */}
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-6">Utilisateurs par Rôle</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium text-slate-600">Étudiants</span>
+                          <span className="text-sm font-bold text-slate-900">{utilisateurs.filter(u => u.role === 'etudiant').length}</span>
+                        </div>
+                        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                            style={{ width: `${utilisateurs.length > 0 ? (utilisateurs.filter(u => u.role === 'etudiant').length / utilisateurs.length) * 100 : 0}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm font-medium text-slate-600">Admins</span>
+                          <span className="text-sm font-bold text-slate-900">{utilisateurs.filter(u => u.role === 'admin').length}</span>
+                        </div>
+                        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-purple-500 rounded-full transition-all duration-500"
+                            style={{ width: `${utilisateurs.length > 0 ? (utilisateurs.filter(u => u.role === 'admin').length / utilisateurs.length) * 100 : 0}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </motion.section>
             )}
           </AnimatePresence>

@@ -4,6 +4,11 @@ import { apiMentors } from '../api';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
 import { useContext } from 'react';
 import { useAlerte } from '../components/AlertePersonnalisee';
+import SkeletonCard from '../components/ui/SkeletonCard';
+import StarRating from '../components/ui/StarRating';
+import Tooltip from '../components/ui/Tooltip';
+import LazyImage from '../components/ui/LazyImage';
+import ratingService from '../services/RatingService';
 const Mentors = () => {
   const { utilisateur } = useContext(ContexteUtilisateur);
   const [recherche, setRecherche] = useState('');
@@ -67,7 +72,9 @@ const Mentors = () => {
             Faites-vous accompagner par des étudiants plus expérimentés pour réussir votre parcours académique.
           </p>
           <div className="bg-white w-full max-w-[600px] px-5 py-4 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center gap-3 border border-slate-200 mb-8">
-            <i className="fa-solid fa-search text-slate-400 text-lg"></i>
+            <Tooltip content="Rechercher un mentor">
+              <i className="fa-solid fa-search text-slate-400 text-lg"></i>
+            </Tooltip>
             <input 
               type="text" 
               placeholder="Rechercher par nom ou spécialité..." 
@@ -83,17 +90,21 @@ const Mentors = () => {
           )}
         </section>
         <section className="max-w-[1200px] mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-sm font-black text-slate-400 uppercase tracking-[2px] text-center">Nos Mentors</h2>
+          </div>
           <div className="mb-8">
             <h2 className="text-sm font-black text-slate-400 uppercase tracking-[2px] text-center mb-6">Filtrer par Filière</h2>
             <div className="flex flex-wrap justify-center gap-3">
               {filieres.map(f => (
-                <BoutonFiltre 
-                  key={f} 
-                  texte={f === 'tous' ? 'Toutes les Filières' : f.charAt(0).toUpperCase() + f.slice(1)} 
-                  actif={filiereActuelle === f} 
-                  onClick={() => changerFiliere(f)} 
-                  couleur="bg-primary" 
-                />
+                <Tooltip content={`Filtrer par ${f === 'tous' ? 'toutes les filières' : f}`} key={f}>
+                  <BoutonFiltre 
+                    texte={f === 'tous' ? 'Toutes les Filières' : f.charAt(0).toUpperCase() + f.slice(1)} 
+                    actif={filiereActuelle === f} 
+                    onClick={() => changerFiliere(f)} 
+                    couleur="bg-primary" 
+                  />
+                </Tooltip>
               ))}
             </div>
           </div>
@@ -114,9 +125,8 @@ const Mentors = () => {
             </div>
           )}
           {chargement && (
-            <div className="text-center py-20 text-slate-400">
-              <i className="fas fa-spinner fa-spin text-4xl mb-4 text-primary"></i>
-              <p className="text-lg font-medium">Chargement des mentors depuis le serveur...</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((i) => <SkeletonCard key={i} />)}
             </div>
           )}
           {erreur && !chargement && (
@@ -186,23 +196,27 @@ const CarteMentor = ({ mentor, index }) => {
   const bgGradient = classes[1];
   const textClass = classes[2];
   const badgeBg = classes[3];
+  const nombreVotes = ratingService.getRatingCount('mentor', mentor.id);
   return (
     <div className={`bg-white rounded-[24px] p-6 border-t-[6px] shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_15px_35px_rgba(0,0,0,0.08)] hover:-translate-y-2 ${borderClass}`}>
       <div className="flex items-center gap-4 mb-5">
-        <div 
-          className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden flex items-center justify-center font-bold text-slate-400 text-xl border border-slate-100"
-          style={mentor.photo ? { backgroundImage: `url(${mentor.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
-        >
-          {!mentor.photo && mentor.nom[0]}
-        </div>
+        {mentor.photo ? (
+          <LazyImage 
+            src={mentor.photo} 
+            alt={mentor.nom}
+            className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100"
+          />
+        ) : (
+          <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center font-bold text-slate-400 text-xl border border-slate-100">
+            {mentor.nom[0]}
+          </div>
+        )}
         <div>
           <h3 className="font-bold text-slate-900 text-lg leading-tight">{mentor.nom}</h3>
           <p className="text-[11px] text-slate-400 uppercase font-black tracking-widest mt-1">{mentor.filiere} • {mentor.annee}</p>
-          {mentor.note > 0 && (
-            <p className="text-[11px] text-amber-500 font-bold mt-0.5">
-              <i className="fas fa-star mr-1"></i>{mentor.note} · {mentor.nbEtudiants} étudiant{mentor.nbEtudiants > 1 ? 's' : ''}
-            </p>
-          )}
+          <div className="mt-2">
+            <StarRating itemId={mentor.id} itemType="mentor" initialRating={mentor.moyenneRating || mentor.note || 0} size="sm" showCount={true} />
+          </div>
         </div>
       </div>
       <div className={`p-4 rounded-2xl mb-5 bg-linear-to-br ${bgGradient} to-white/50 border border-white`}>
@@ -216,10 +230,12 @@ const CarteMentor = ({ mentor, index }) => {
         </p>
       </div>
       <div className="mb-5">
-        <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${mentor.disponible ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
-          <i className={`fas fa-circle text-[6px] mr-1 ${mentor.disponible ? 'text-emerald-500' : 'text-slate-400'}`}></i>
-          {mentor.disponible ? 'Disponible' : 'Indisponible'}
-        </span>
+        <Tooltip content={mentor.disponible ? 'Ce mentor est disponible pour vous accompagner' : 'Ce mentor est actuellement indisponible'}>
+          <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${mentor.disponible ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+            <i className={`fas fa-circle text-[6px] mr-1 ${mentor.disponible ? 'text-emerald-500' : 'text-slate-400'}`}></i>
+            {mentor.disponible ? 'Disponible' : 'Indisponible'}
+          </span>
+        </Tooltip>
       </div>
       {mentor.telephone && (
         <div className="mb-4">

@@ -5,6 +5,10 @@
   --color-primary: #3AB0FF;
   --color-primary-dark: #1a94e6;
   --color-bg: #edf8ff;
+  --breakpoint-mobile: 640px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1280px;
 }
 
 @layer base {
@@ -17,13 +21,66 @@
   .carte-etudiant {
     @apply bg-white rounded-2xl p-6 border border-slate-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
   }
-  
+
   .bouton-principal {
-    @apply px-6 py-3 rounded-xl font-semibold bg-primary text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-95;
+    @apply px-6 py-3 rounded-xl font-semibold bg-primary text-white transition-all duration-300 hover:bg-primary-dark hover:shadow-lg active:scale-95 hover:-translate-y-0.5;
   }
 
   .bouton-secondaire {
-    @apply px-6 py-3 rounded-xl font-semibold bg-white text-primary border border-primary transition-all duration-300 hover:bg-blue-50 active:scale-95;
+    @apply px-6 py-3 rounded-xl font-semibold bg-white text-primary border border-primary transition-all duration-300 hover:bg-blue-50 active:scale-95 hover:-translate-y-0.5;
+  }
+
+  /* Micro-interactions supplémentaires */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .hover-scale {
+    @apply transition-all duration-200 hover:scale-105 active:scale-95;
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+
+  .fade-in-down {
+    animation: fadeInDown 0.5s ease-out forwards;
+  }
+
+  /* Responsive utilities */
+  .container-responsive {
+    @apply px-4 sm:px-6 md:px-8 lg:px-[5%] xl:px-[8%];
+  }
+
+  .text-responsive {
+    @apply text-sm sm:text-base md:text-lg lg:text-xl;
+  }
+
+  .grid-responsive {
+    @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+}
+
+/* Animations supplémentaires */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

@@ -4,14 +4,33 @@ function getToken() {
   return localStorage.getItem('campus_token');
 }
 
+// Cache simple pour les requêtes GET
+const cacheRequetes = new Map();
+const DUREE_CACHE = 5 * 60 * 1000; // 5 minutes
+
 async function requete(endpoint, options = {}) {
   const token = getToken();
-
   const headers = {
     'Content-Type': 'application/json',
     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...options.headers,
   };
+
+  // Pour les requêtes GET, vérifier le cache d'abord
+  const estRequeteGet = !options.method || options.method === 'GET';
+  const cleCache = `${endpoint}_${JSON.stringify(options.body || '')}`;
+
+  if (estRequeteGet && cacheRequetes.has(cleCache)) {
+    const { data, timestamp } = cacheRequetes.get(cleCache);
+    if (Date.now() - timestamp < DUREE_CACHE) {
+      // Retourner les données du cache si on est hors ligne
+      if (!navigator.onLine) {
+        return data;
+      }
+    } else {
+      cacheRequetes.delete(cleCache);
+    }
+  }
 
   try {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
@@ -32,12 +51,43 @@ async function requete(endpoint, options = {}) {
       throw new Error(data.erreur || `Erreur ${response.status}`);
     }
 
+    // Mettre en cache les requêtes GET réussies
+    if (estRequeteGet && data) {
+      cacheRequetes.set(cleCache, { data, timestamp: Date.now() });
+    }
+
     return data;
   } catch (error) {
+    // Si hors ligne, essayer de retourner les données du cache
+    if (!navigator.onLine && estRequeteGet && cacheRequetes.has(cleCache)) {
+      const { data } = cacheRequetes.get(cleCache);
+      console.log('Mode hors ligne - utilisation du cache:', endpoint);
+      return data;
+    }
+    
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
       throw new Error('Serveur inaccessible — vérifiez que le backend est démarré');
     }
     throw error;
+  }
+}
+
+// Fonction pour vider le cache (utile après modifications)
+export function viderCache() {
+  cacheRequetes.clear();
+}
+
+// Fonction pour précharger des données dans le cache
+export function prechargerCache(endpoint, options = {}) {
+  const cleCache = `${endpoint}_${JSON.stringify(options.body || '')}`;
+  if (!cacheRequetes.has(cleCache)) {
+    requete(endpoint, options).then(data => {
+      if (data) {
+        cacheRequetes.set(cleCache, { data, timestamp: Date.now() });
+      }
+    }).catch(err => {
+      console.error('Erreur préchargement cache:', err);
+    });
   }
 }
 
@@ -99,6 +149,12 @@ export const apiMentors = {
     method: 'PUT',
     body: JSON.stringify({ status }),
   }),
+  rate: (id, note) => requete(`/mentors/${id}/rate`, {
+    method: 'POST',
+    body: JSON.stringify({ note }),
+  }),
+  getRatings: (id) => requete(`/mentors/${id}/ratings`),
+  getMyRating: (id) => requete(`/mentors/${id}/my-rating`),
 };
 
 export const apiClubs = {
@@ -117,6 +173,12 @@ export const apiClubs = {
   }),
   supprimer: (id) => requete(`/clubs/${id}`, { method: 'DELETE' }),
   rejoindre: (id) => requete(`/clubs/${id}/rejoindre`, { method: 'POST' }),
+  rate: (id, note) => requete(`/clubs/${id}/rate`, {
+    method: 'POST',
+    body: JSON.stringify({ note }),
+  }),
+  getRatings: (id) => requete(`/clubs/${id}/ratings`),
+  getMyRating: (id) => requete(`/clubs/${id}/my-rating`),
 };
 
 export const apiMessages = {

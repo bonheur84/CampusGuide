@@ -1,0 +1,40 @@
+{
+  "name": "CampusGuide - Université Nouveaux Horizons",
+  "short_name": "CampusGuide",
+  "description": "Application de gestion universitaire avec système de mentorat, clubs et calendrier",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3AB0FF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Mentors",
+      "short_name": "Mentors",
+      "description": "Trouvez votre mentor",
+      "url": "/mentors",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Calendrier",
+      "short_name": "Calendrier",
+      "description": "Voir le calendrier",
+      "url": "/calendrier",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

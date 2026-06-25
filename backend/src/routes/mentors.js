@@ -68,6 +68,16 @@ router.get('/', async (req, res) => {
       };
       return mentor;
     });
+
+    // Ajouter les statistiques de rating pour chaque mentor
+    for (const mentor of mentors) {
+      const [stats] = await pool.query(
+        'SELECT AVG(note) as moyenne, COUNT(*) as total FROM ratings WHERE mentor_id = ?',
+        [mentor.id]
+      );
+      mentor.moyenneRating = parseFloat(stats[0].moyenne || 0).toFixed(1);
+      mentor.totalVotes = stats[0].total;
+    }
     
     res.json({ success: true, total: mentors.length, mentors });
   } catch (err) {
@@ -234,6 +244,75 @@ router.delete('/:id', async (req, res) => {
     const [result] = await pool.query('DELETE FROM mentors WHERE id = ?', [req.params.id]);
     if (result.affectedRows === 0) return res.status(404).json({ success: false, erreur: 'Mentor introuvable' });
     res.json({ success: true, message: 'Mentor supprimé' });
+  } catch (err) {
+    res.status(500).json({ success: false, erreur: 'Erreur serveur' });
+  }
+});
+
+// POST /api/mentors/:id/rate — Noter un mentor
+router.post('/:id/rate', authentifier, async (req, res) => {
+  const { note } = req.body;
+  if (!note || note < 1 || note > 5) {
+    return res.status(400).json({ success: false, erreur: 'La note doit être entre 1 et 5' });
+  }
+
+  try {
+    const ratingId = uuidv4();
+    
+    // Insérer ou mettre à jour le vote (ON DUPLICATE KEY UPDATE)
+    await pool.query(
+      `INSERT INTO ratings (id, mentor_id, utilisateur_id, note) VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE note = ?, updated_at = CURRENT_TIMESTAMP`,
+      [ratingId, req.params.id, req.utilisateur.id, note, note]
+    );
+
+    // Récupérer les statistiques mises à jour
+    const [stats] = await pool.query(
+      'SELECT AVG(note) as moyenne, COUNT(*) as total FROM ratings WHERE mentor_id = ?',
+      [req.params.id]
+    );
+
+    res.json({ 
+      success: true, 
+      moyenne: parseFloat(stats[0].moyenne || 0).toFixed(1),
+      totalVotes: stats[0].total
+    });
+  } catch (err) {
+    console.error('Erreur notation:', err);
+    res.status(500).json({ success: false, erreur: 'Erreur serveur' });
+  }
+});
+
+// GET /api/mentors/:id/ratings — Obtenir les statistiques de notation
+router.get('/:id/ratings', async (req, res) => {
+  try {
+    const [stats] = await pool.query(
+      'SELECT AVG(note) as moyenne, COUNT(*) as total FROM ratings WHERE mentor_id = ?',
+      [req.params.id]
+    );
+
+    res.json({ 
+      success: true, 
+      moyenne: parseFloat(stats[0].moyenne || 0).toFixed(1),
+      totalVotes: stats[0].total
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, erreur: 'Erreur serveur' });
+  }
+});
+
+// GET /api/mentors/:id/my-rating — Obtenir la note de l'utilisateur connecté
+router.get('/:id/my-rating', authentifier, async (req, res) => {
+  try {
+    const [rating] = await pool.query(
+      'SELECT note FROM ratings WHERE mentor_id = ? AND utilisateur_id = ?',
+      [req.params.id, req.utilisateur.id]
+    );
+
+    res.json({ 
+      success: true, 
+      note: rating.length > 0 ? rating[0].note : null
+    });
   } catch (err) {
     res.status(500).json({ success: false, erreur: 'Erreur serveur' });
   }

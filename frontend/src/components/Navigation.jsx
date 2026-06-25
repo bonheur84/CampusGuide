@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ContexteUtilisateur } from '../contexte/ContexteUtilisateur';
+import Tooltip from './ui/Tooltip';
 const Navigation = () => {
   const [menuOuvert, setMenuOuvert] = useState(false);
   const { utilisateur, photoProfil, notifications, mettreAJourUtilisateur } = useContext(ContexteUtilisateur);
@@ -55,8 +56,9 @@ const Navigation = () => {
         )}
       </nav>
       <div className="flex items-center gap-4">
-        <div className="relative flex items-center gap-2.5 cursor-pointer px-3 py-1.5 rounded-lg transition-all duration-200 border border-transparent hover:bg-white hover:border-slate-200 group">
-          <div className="relative">
+        <Tooltip content="Menu utilisateur">
+          <div className="relative flex items-center gap-2.5 cursor-pointer px-3 py-1.5 rounded-lg transition-all duration-200 border border-transparent hover:bg-white hover:border-slate-200 group">
+            <div className="relative">
             <div 
               className="bg-slate-200 text-slate-500 text-[13px] font-bold w-9 h-9 flex items-center justify-center rounded-full overflow-hidden shadow-sm"
               style={photoProfil ? { backgroundImage: `url(${photoProfil})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
@@ -65,9 +67,9 @@ const Navigation = () => {
             </div>
             {nbNonLues > 0 && <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-primary border-2 border-white rounded-full animate-bounce shadow-sm"></span>}
           </div>
-          <span className="hidden sm:inline text-sm font-semibold text-slate-800">{utilisateur.prenom}</span>
+            <span className="hidden sm:inline text-sm font-semibold text-slate-800">{utilisateur.prenom}</span>
           <i className="fas fa-chevron-down text-[11px] text-slate-400 transition-transform duration-200 group-hover:rotate-180"></i>
-          <div className="absolute top-[calc(100%+10px)] right-0 w-[260px] bg-white rounded-xl shadow-lg border border-slate-200 p-2 opacity-0 invisible -translate-y-2 transition-all duration-200 z-2000 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+            <div className="absolute top-[calc(100%+10px)] right-0 w-[260px] bg-white rounded-xl shadow-lg border border-slate-200 p-2 opacity-0 invisible -translate-y-2 transition-all duration-200 z-2000 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
             <Link to="/parametres" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-slate-600 no-underline rounded-md hover:bg-slate-50 transition-all duration-150">
               <i className="fas fa-cog text-sm w-[18px] text-center text-primary"></i>Paramètres
             </Link>
@@ -86,6 +88,9 @@ const Navigation = () => {
               </div>
               {nbNonLues > 0 && <span className="w-2.5 h-2.5 bg-primary rounded-full shadow-[0_0_8px_rgba(58,176,255,0.6)]"></span>}
             </Link>
+            <Link to="/a-propos" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-slate-600 no-underline rounded-md hover:bg-slate-50 hover:text-slate-800 transition-all duration-150">
+              <i className="fa-solid fa-info-circle text-sm w-[18px] text-center text-slate-400"></i>À propos
+            </Link>
             <div className="h-px bg-slate-200 mx-2 my-1"></div>
             <Link 
               to="/login" 
@@ -94,15 +99,18 @@ const Navigation = () => {
             >
               <i className="fas fa-sign-out-alt text-sm w-[18px] text-center text-red-500"></i>Déconnexion
             </Link>
+            </div>
           </div>
-        </div>
-        <button 
-          onClick={() => setMenuOuvert(!menuOuvert)}
-          className="lg:hidden text-slate-600 text-xl cursor-pointer p-2 hover:bg-slate-100 rounded-lg transition-all duration-200 relative"
-        >
+        </Tooltip>
+        <Tooltip content="Menu de navigation">
+          <button 
+            onClick={() => setMenuOuvert(!menuOuvert)}
+            className="lg:hidden text-slate-600 text-xl cursor-pointer p-2 hover:bg-slate-100 rounded-lg transition-all duration-200 relative"
+          >
           <i className="fa-solid fa-bars"></i>
-          {nbNonLues > 0 && <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-primary rounded-full border border-white"></span>}
-        </button>
+            {nbNonLues > 0 && <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-primary rounded-full border border-white"></span>}
+          </button>
+        </Tooltip>
       </div>
       <div className={`${menuOuvert ? 'flex' : 'hidden'} absolute top-full left-0 w-full bg-white border-b border-slate-200 flex-col p-4 gap-2 lg:hidden shadow-lg animate-fadeInDown`}>
         <MobileNavLink to="/" icon="fa-house" label="Accueil" />

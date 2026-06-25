@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { apiNotifications } from '../api';
+import rappelService from '../services/RappelService';
+import offlineService from '../services/OfflineService';
 
 export const ContexteUtilisateur = createContext();
 
@@ -59,8 +61,36 @@ export const FournisseurUtilisateur = ({ children }) => {
 
     chargerNotifsServeur();
     const interval = setInterval(chargerNotifsServeur, 30000);
-    return () => clearInterval(interval);
-  }, [utilisateur.id, utilisateur.role]);
+    
+    // Démarrer le service de rappels
+    rappelService.demarrer(ajouterNotification);
+    
+    // Sauvegarder les données critiques pour mode hors ligne
+    const sauvegarderDonnees = () => {
+      offlineService.sauvegarderDonneesCritiques({
+        utilisateur,
+        notifications
+      });
+    };
+
+    sauvegarderDonnees();
+    const intervalSauvegarde = setInterval(sauvegarderDonnees, 60000); // Toutes les minutes
+    
+    // Traiter la file d'attente quand on se connecte
+    if (navigator.onLine) {
+      offlineService.traiterFileAttente(async (action) => {
+        // Ici on peut exécuter les actions en attente
+        console.log('Traitement action hors ligne:', action);
+        return { succes: true };
+      });
+    }
+    
+    return () => {
+      clearInterval(interval);
+      clearInterval(intervalSauvegarde);
+      rappelService.arreter();
+    };
+  }, [utilisateur.id, utilisateur.role, utilisateur, notifications]);
 
   useEffect(() => {
     if (!utilisateur.id) return;
@@ -78,10 +108,12 @@ export const FournisseurUtilisateur = ({ children }) => {
       localStorage.removeItem('campus_user');
       localStorage.removeItem('campus_token');
       localStorage.removeItem('campus_user_id');
+      window.dispatchEvent(new Event('userChanged'));
       return;
     }
     setUtilisateur(nouvelUtilisateur);
     localStorage.setItem('campus_user', JSON.stringify(nouvelUtilisateur));
+    window.dispatchEvent(new Event('userChanged'));
   };
 
   const mettreAJourPhoto = (nouvellePhoto) => {

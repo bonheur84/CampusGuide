@@ -7,6 +7,18 @@ import SkeletonTable from '../components/ui/SkeletonTable';
 import Tooltip from '../components/ui/Tooltip';
 import exportService from '../services/ExportService';
 import ratingService from '../services/RatingService';
+import { Pie, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip as ChartTooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+} from 'chart.js';
+
+ChartJS.register(ArcElement, ChartTooltip, Legend, CategoryScale, LinearScale, BarElement);
 const AdminDashboard = () => {
   const { utilisateur, ajouterNotification } = useContext(ContexteUtilisateur);
   const [tab, setTab] = useState('utilisateurs'); // 'utilisateurs', 'mentors', 'clubs', 'evenements', 'analytics'
@@ -79,6 +91,66 @@ const AdminDashboard = () => {
       }
     }
   }, []);
+
+  // Données pour le graphique circulaire (répartition par filière)
+  const filiereData = {
+    labels: ['Informatique', 'Médecine', 'Droit', 'Gestion', 'Architecture'],
+    datasets: [
+      {
+        data: [
+          utilisateurs.filter(u => u.filiere === 'informatique').length,
+          utilisateurs.filter(u => u.filiere === 'medecine').length,
+          utilisateurs.filter(u => u.filiere === 'droit').length,
+          utilisateurs.filter(u => u.filiere === 'gestion').length,
+          utilisateurs.filter(u => u.filiere === 'architecture').length
+        ],
+        backgroundColor: [
+          '#3AB0FF',
+          '#FF6B6B',
+          '#4ECDC4',
+          '#FFE66D',
+          '#95E1D3'
+        ],
+        borderWidth: 0
+      }
+    ]
+  };
+
+  // Données pour le graphique à barres (utilisateurs par promotion)
+  const promotionData = {
+    labels: ['L1', 'L2', 'L3', 'M1', 'M2'],
+    datasets: [
+      {
+        label: 'Nombre d\'étudiants',
+        data: [
+          utilisateurs.filter(u => u.annee === 'L1' || u.promotion === 'L1').length,
+          utilisateurs.filter(u => u.annee === 'L2' || u.promotion === 'L2').length,
+          utilisateurs.filter(u => u.annee === 'L3' || u.promotion === 'L3').length,
+          utilisateurs.filter(u => u.annee === 'M1' || u.promotion === 'M1').length,
+          utilisateurs.filter(u => u.annee === 'M2' || u.promotion === 'M2').length
+        ],
+        backgroundColor: '#3AB0FF',
+        borderRadius: 8
+      }
+    ]
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 20,
+          font: {
+            size: 12,
+            weight: 'bold'
+          }
+        }
+      }
+    }
+  };
   useEffect(() => {
     if (utilisateur.role !== 'admin') return;
     chargerDonnees();
@@ -636,7 +708,41 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                {/* Simple Charts */}
+                {/* Advanced Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Répartition par Filière - Pie Chart */}
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-6">Répartition par Filière</h3>
+                    <div className="h-64">
+                      <Pie data={filiereData} options={chartOptions} />
+                    </div>
+                  </div>
+
+                  {/* Utilisateurs par Promotion - Bar Chart */}
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-6">Utilisateurs par Promotion</h3>
+                    <div className="h-64">
+                      <Bar data={promotionData} options={{
+                        ...chartOptions,
+                        plugins: {
+                          legend: {
+                            display: false
+                          }
+                        },
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            ticks: {
+                              stepSize: 1
+                            }
+                          }
+                        }
+                      }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Simple Progress Charts */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Mentors by Status */}
                   <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
@@ -648,7 +754,7 @@ const AdminDashboard = () => {
                           <span className="text-sm font-bold text-slate-900">{mentors.filter(m => m.status === 'approuve').length}</span>
                         </div>
                         <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-emerald-500 rounded-full transition-all duration-500"
                             style={{ width: `${mentors.length > 0 ? (mentors.filter(m => m.status === 'approuve').length / mentors.length) * 100 : 0}%` }}
                           ></div>
@@ -660,7 +766,7 @@ const AdminDashboard = () => {
                           <span className="text-sm font-bold text-slate-900">{mentors.filter(m => m.status === 'en_attente').length}</span>
                         </div>
                         <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-amber-500 rounded-full transition-all duration-500"
                             style={{ width: `${mentors.length > 0 ? (mentors.filter(m => m.status === 'en_attente').length / mentors.length) * 100 : 0}%` }}
                           ></div>
@@ -672,7 +778,7 @@ const AdminDashboard = () => {
                           <span className="text-sm font-bold text-slate-900">{mentors.filter(m => m.status === 'rejete').length}</span>
                         </div>
                         <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-red-500 rounded-full transition-all duration-500"
                             style={{ width: `${mentors.length > 0 ? (mentors.filter(m => m.status === 'rejete').length / mentors.length) * 100 : 0}%` }}
                           ></div>
@@ -691,7 +797,7 @@ const AdminDashboard = () => {
                           <span className="text-sm font-bold text-slate-900">{utilisateurs.filter(u => u.role === 'etudiant').length}</span>
                         </div>
                         <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-blue-500 rounded-full transition-all duration-500"
                             style={{ width: `${utilisateurs.length > 0 ? (utilisateurs.filter(u => u.role === 'etudiant').length / utilisateurs.length) * 100 : 0}%` }}
                           ></div>
@@ -703,12 +809,70 @@ const AdminDashboard = () => {
                           <span className="text-sm font-bold text-slate-900">{utilisateurs.filter(u => u.role === 'admin').length}</span>
                         </div>
                         <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-purple-500 rounded-full transition-all duration-500"
                             style={{ width: `${utilisateurs.length > 0 ? (utilisateurs.filter(u => u.role === 'admin').length / utilisateurs.length) * 100 : 0}%` }}
                           ></div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Detailed Statistics Table */}
+                <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                  <h3 className="text-lg font-bold text-slate-900 mb-6">Statistiques Détaillées</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Total Utilisateurs</p>
+                      <p className="text-2xl font-bold text-slate-900">{utilisateurs.length}</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Total Mentors</p>
+                      <p className="text-2xl font-bold text-slate-900">{mentors.length}</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Total Clubs</p>
+                      <p className="text-2xl font-bold text-slate-900">{clubs.length}</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Total Événements</p>
+                      <p className="text-2xl font-bold text-slate-900">{evenements.length}</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Taux d'approbation</p>
+                      <p className="text-2xl font-bold text-emerald-600">{mentors.length > 0 ? Math.round((mentors.filter(m => m.status === 'approuve').length / mentors.length) * 100) : 0}%</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Moyenne membres/club</p>
+                      <p className="text-2xl font-bold text-amber-600">{clubs.length > 0 ? Math.round(clubs.reduce((sum, c) => sum + (c.membres || 0), 0) / clubs.length) : 0}</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Filière la plus populaire</p>
+                      <p className="text-2xl font-bold text-blue-600">
+                        {utilisateurs.length > 0 ? 
+                          (() => {
+                            const counts = utilisateurs.reduce((acc, u) => {
+                              acc[u.filiere] = (acc[u.filiere] || 0) + 1;
+                              return acc;
+                            }, { informatique: 0, medecine: 0, droit: 0, gestion: 0, architecture: 0 });
+                            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+                            const top = sorted[0]?.[0] || '-';
+                            return top.charAt(0).toUpperCase() + top.slice(1);
+                          })()
+                          : '-'}
+                      </p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Promotion la plus active</p>
+                      <p className="text-2xl font-bold text-purple-600">
+                        {utilisateurs.length > 0 ?
+                          ['L1', 'L2', 'L3', 'M1', 'M2'].map(p => ({
+                            promo: p,
+                            count: utilisateurs.filter(u => u.annee === p || u.promotion === p).length
+                          })).sort((a, b) => b.count - a.count)[0]?.promo || '-'
+                          : '-'}
+                      </p>
                     </div>
                   </div>
                 </div>

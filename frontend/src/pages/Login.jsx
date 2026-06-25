@@ -46,7 +46,8 @@ const Login = () => {
         email: u.email,
         filiere: u.filiere,
         annee: u.annee,
-        role: u.role, // Ajout du rôle ici
+        promotion: u.annee, // S'assurer que promotion est aussi défini
+        role: u.role,
       });
       if (u.role === 'admin') {
         navigate('/admin');

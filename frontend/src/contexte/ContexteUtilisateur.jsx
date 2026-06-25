@@ -26,6 +26,19 @@ export const FournisseurUtilisateur = ({ children }) => {
     const userSauvegarde = localStorage.getItem('campus_user');
     if (userSauvegarde) {
       const user = JSON.parse(userSauvegarde);
+      
+      // S'assurer que prenom et nom sont séparés correctement
+      if (!user.prenom && user.nom) {
+        const nomParts = user.nom.split(' ');
+        user.prenom = nomParts[0] || user.nom;
+        user.nom = nomParts.slice(1).join(' ') || '';
+      }
+      
+      // S'assurer que promotion est défini (utiliser annee si promotion n'existe pas)
+      if (!user.promotion && user.annee) {
+        user.promotion = user.annee;
+      }
+      
       setUtilisateur(user);
 
       const notifsSauvegardees = localStorage.getItem(cleNotifsUser(user.id));

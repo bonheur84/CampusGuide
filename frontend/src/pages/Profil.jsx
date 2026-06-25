@@ -46,7 +46,7 @@ const Profil = () => {
     if (utilisateur && utilisateur.id) {
       setNom(utilisateur.nom || '');
       setFiliere(utilisateur.filiere || 'informatique');
-      setPromotion(utilisateur.promotion || 'L1');
+      setPromotion(utilisateur.promotion || utilisateur.annee || 'L1');
       setPhotoAperçu(photoProfil || utilisateur.avatar || getDefaultPhoto(utilisateur.id));
       
       // Charger les statistiques de rating si l'utilisateur est un mentor
@@ -133,7 +133,16 @@ const Profil = () => {
         promotion,
         avatar: photoAperçu
       });
-      mettreAJourUtilisateur(res.utilisateur);
+      
+      // Extraire le prénom du nom complet pour l'affichage
+      const nomParts = nom.split(' ');
+      const utilisateurMaj = {
+        ...res.utilisateur,
+        prenom: nomParts[0] || nom,
+        nom: nomParts.slice(1).join(' ') || ''
+      };
+      
+      mettreAJourUtilisateur(utilisateurMaj);
       if (photoAperçu) mettreAJourPhoto(photoAperçu);
       ajouterNotification('Profil mis à jour', 'Vos informations personnelles ont été enregistrées.', 'success', 'fa-user-check');
     } catch (err) {
@@ -195,8 +204,8 @@ const Profil = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Filière</label>
-                    <select value={filiere} onChange={(e) => setFiliere(e.target.value)} className="w-full p-4 rounded-2xl border border-slate-200 focus:border-primary outline-none bg-slate-50">
+                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Filière (Non modifiable)</label>
+                    <select disabled value={filiere} className="w-full p-4 rounded-2xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed">
                       <option value="informatique">Informatique</option>
                       <option value="medecine">Médecine</option>
                       <option value="droit">Droit</option>
@@ -205,8 +214,8 @@ const Profil = () => {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Promotion</label>
-                    <select value={promotion} onChange={(e) => setPromotion(e.target.value)} className="w-full p-4 rounded-2xl border border-slate-200 focus:border-primary outline-none bg-slate-50">
+                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Promotion (Non modifiable)</label>
+                    <select disabled value={promotion} className="w-full p-4 rounded-2xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed">
                       <option value="L1">Licence 1</option>
                       <option value="L2">Licence 2</option>
                       <option value="L3">Licence 3</option>

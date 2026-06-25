@@ -95,6 +95,14 @@ export const apiUtilisateurs = {
   getIdConnecte: () => localStorage.getItem('campus_user_id'),
   estConnecte: () => !!localStorage.getItem('campus_token'),
 
+  inscription: async (email, motDePasse, nom, filiere, annee) => {
+    const data = await requete('/utilisateurs/inscription', {
+      method: 'POST',
+      body: JSON.stringify({ email, motDePasse, nom, filiere, annee }),
+    });
+    return data;
+  },
+
   connexion: async (email, motDePasse) => {
     const data = await requete('/utilisateurs/connexion', {
       method: 'POST',

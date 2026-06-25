@@ -1,15 +1,16 @@
 class ExportService {
   // Exporter en CSV
-  exportToCSV(data, filename) {
+  exportToCSV(data, filename, fields = null, customHeaders = null) {
     if (!data || data.length === 0) {
       console.error('Aucune donnée à exporter');
       return;
     }
 
-    const headers = Object.keys(data[0]);
+    // Utiliser les champs personnalisés si fournis, sinon toutes les clés
+    const headers = fields || Object.keys(data[0]);
     
-    // Formater les en-têtes pour un affichage plus lisible
-    const formattedHeaders = headers.map(header => {
+    // Utiliser les en-têtes personnalisés si fournis, sinon formater automatiquement
+    const formattedHeaders = customHeaders || headers.map(header => {
       return header
         .replace(/([A-Z])/g, ' $1')
         .replace(/^./, str => str.toUpperCase())
@@ -17,10 +18,10 @@ class ExportService {
     });
 
     const csvContent = [
-      formattedHeaders.map(h => `"${h}"`).join(','),
+      formattedHeaders.map(h => `"${h}"`).join(';'),
       ...data.map(row => headers.map(header => {
         let value = row[header];
-        
+
         // Formater les dates si c'est un objet Date ou une chaîne de date
         if (value instanceof Date) {
           value = value.toLocaleDateString('fr-FR');
@@ -31,16 +32,16 @@ class ExportService {
             // Garder la valeur originale si le parsing échoue
           }
         }
-        
+
         // Convertir en chaîne et gérer les valeurs nulles/vides
         const stringValue = String(value ?? '');
-        
+
         // Échapper les guillemets et mettre entre guillemets si nécessaire
-        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n') || stringValue.includes(';')) {
+        if (stringValue.includes('"') || stringValue.includes('\n') || stringValue.includes(';')) {
           return `"${stringValue.replace(/"/g, '""')}"`;
         }
         return stringValue;
-      }).join(','))
+      }).join(';'))
     ].join('\n');
 
     // Ajouter un BOM pour une meilleure compatibilité avec Excel

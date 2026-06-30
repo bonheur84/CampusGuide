@@ -4,6 +4,7 @@ import { FournisseurUtilisateur, ContexteUtilisateur } from './contexte/Contexte
 import Navigation from './components/Navigation';
 import PageTransition from './components/ui/PageTransition';
 import OfflineIndicator from './components/OfflineIndicator';
+import AIAssistant from './components/AIAssistant';
 // Importation des pages (on va les créer juste après)
 import Accueil from './pages/Accueil';
 import Mentors from './pages/Mentors';
@@ -70,6 +71,8 @@ const ContenuApp = () => {
         </footer>
       </div>
       <OfflineIndicator />
+      {/* AI Assistant - Positioned by the component itself */}
+      <AIAssistant />
     </Router>
   );
 };

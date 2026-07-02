@@ -44,12 +44,16 @@ const AdminDashboard = () => {
   // Filtres utilisateurs
   const [filterFiliere, setFilterFiliere] = useState('tous');
   const [filterPromotion, setFilterPromotion] = useState('tous');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Filtrer les utilisateurs
   const filteredUtilisateurs = utilisateurs.filter(u => {
     const filiereMatch = filterFiliere === 'tous' || u.filiere === filterFiliere;
     const promotionMatch = filterPromotion === 'tous' || u.annee === filterPromotion || u.promotion === filterPromotion;
-    return filiereMatch && promotionMatch;
+    const searchMatch = searchQuery === '' || 
+                      u.nom.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                      u.email.toLowerCase().includes(searchQuery.toLowerCase());
+    return filiereMatch && promotionMatch && searchMatch;
   });
 
   // Statistiques précédentes pour calculer les pourcentages
@@ -94,11 +98,14 @@ const AdminDashboard = () => {
 
   // Données pour le graphique circulaire (répartition par filière)
   const filiereData = {
-    labels: ['Informatique', 'Médecine', 'Droit', 'Gestion', 'Architecture'],
+    labels: ['Informatique', 'SIC', 'SAE', 'ST', 'Médecine', 'Droit', 'Gestion', 'Architecture'],
     datasets: [
       {
         data: [
           utilisateurs.filter(u => u.filiere === 'informatique').length,
+          utilisateurs.filter(u => u.filiere === 'sic').length,
+          utilisateurs.filter(u => u.filiere === 'sae').length,
+          utilisateurs.filter(u => u.filiere === 'st').length,
           utilisateurs.filter(u => u.filiere === 'medecine').length,
           utilisateurs.filter(u => u.filiere === 'droit').length,
           utilisateurs.filter(u => u.filiere === 'gestion').length,
@@ -106,6 +113,9 @@ const AdminDashboard = () => {
         ],
         backgroundColor: [
           '#3AB0FF',
+          '#FF9F43',
+          '#EE5A24',
+          '#A29BFE',
           '#FF6B6B',
           '#4ECDC4',
           '#FFE66D',
@@ -325,6 +335,18 @@ const AdminDashboard = () => {
                     <i className="fa-solid fa-filter text-slate-400"></i>
                     <span className="text-sm font-bold text-slate-600">Filtrer par:</span>
                   </div>
+                  <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                    <div className="relative flex-1">
+                      <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                      <input
+                        type="text"
+                        placeholder="Rechercher par nom ou email..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-sm focus:border-primary outline-none bg-slate-50"
+                      />
+                    </div>
+                  </div>
                   <div className="flex items-center gap-2">
                     <label className="text-xs font-bold text-slate-400 uppercase">Filière:</label>
                     <select
@@ -334,6 +356,9 @@ const AdminDashboard = () => {
                     >
                       <option value="tous">Toutes</option>
                       <option value="informatique">Informatique</option>
+                      <option value="sic">SIC</option>
+                      <option value="sae">SAE</option>
+                      <option value="st">ST</option>
                       <option value="medecine">Médecine</option>
                       <option value="droit">Droit</option>
                       <option value="gestion">Gestion</option>
@@ -356,7 +381,7 @@ const AdminDashboard = () => {
                     </select>
                   </div>
                   <button
-                    onClick={() => { setFilterFiliere('tous'); setFilterPromotion('tous'); }}
+                    onClick={() => { setFilterFiliere('tous'); setFilterPromotion('tous'); setSearchQuery(''); }}
                     className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-200 transition-all"
                   >
                     Réinitialiser
@@ -409,6 +434,9 @@ const AdminDashboard = () => {
                           onChange={e => setUserForm({...userForm, filiere: e.target.value})}
                         >
                           <option value="informatique">Informatique</option>
+                          <option value="sic">SIC</option>
+                          <option value="sae">SAE</option>
+                          <option value="st">ST</option>
                           <option value="medecine">Médecine</option>
                           <option value="droit">Droit</option>
                           <option value="gestion">Gestion</option>
@@ -451,16 +479,19 @@ const AdminDashboard = () => {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-100">
+                        <th className="p-5 text-xs font-black text-slate-400 uppercase tracking-widest">N°</th>
                         <th className="p-5 text-xs font-black text-slate-400 uppercase tracking-widest">Nom</th>
                         <th className="p-5 text-xs font-black text-slate-400 uppercase tracking-widest">Email</th>
                         <th className="p-5 text-xs font-black text-slate-400 uppercase tracking-widest">Rôle</th>
                         <th className="p-5 text-xs font-black text-slate-400 uppercase tracking-widest">Filière</th>
+                        <th className="p-5 text-xs font-black text-slate-400 uppercase tracking-widest">Promotion</th>
                         <th className="p-5 text-xs font-black text-slate-400 uppercase tracking-widest">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-50">
-                      {filteredUtilisateurs.map(u => (
+                      {filteredUtilisateurs.map((u, index) => (
                         <tr key={u.id} className="hover:bg-slate-50/50 transition-colors">
+                          <td className="p-5 font-bold text-slate-800 text-center">{index + 1}</td>
                           <td className="p-5 font-bold text-slate-800">{u.nom}</td>
                           <td className="p-5 text-slate-500 text-sm">{u.email}</td>
                           <td className="p-5">
@@ -468,7 +499,8 @@ const AdminDashboard = () => {
                               {u.role}
                             </span>
                           </td>
-                          <td className="p-5 text-slate-500 text-sm">{u.filiere || '-'} {u.promotion || ''}</td>
+                          <td className="p-5 text-slate-500 text-sm">{u.filiere || '-'}</td>
+                          <td className="p-5 text-slate-500 text-sm">{u.annee || u.promotion || '-'}</td>
                           <td className="p-5">
                             {u.id !== utilisateur.id && (
                               <button 
@@ -840,12 +872,18 @@ const AdminDashboard = () => {
                       <p className="text-2xl font-bold text-slate-900">{evenements.length}</p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-xl">
-                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Taux d'approbation</p>
-                      <p className="text-2xl font-bold text-emerald-600">{mentors.length > 0 ? Math.round((mentors.filter(m => m.status === 'approuve').length / mentors.length) * 100) : 0}%</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Club le mieux noté</p>
+                      <p className="text-2xl font-bold text-pink-600">
+                        {clubs.length > 0 ? 
+                          clubs.reduce((best, c) => (c.moyenneRating || 0) > (best.moyenneRating || 0) ? c : best, clubs[0])?.nom || '-'
+                          : '-'}
+                      </p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-xl">
-                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Moyenne membres/club</p>
-                      <p className="text-2xl font-bold text-amber-600">{clubs.length > 0 ? Math.round(clubs.reduce((sum, c) => sum + (c.membres || 0), 0) / clubs.length) : 0}</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Total votes/ratings</p>
+                      <p className="text-2xl font-bold text-cyan-600">
+                        {clubs.reduce((sum, c) => sum + (c.totalVotes || 0), 0) + mentors.reduce((sum, m) => sum + (m.totalVotes || 0), 0)}
+                      </p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-xl">
                       <p className="text-xs font-bold text-slate-400 uppercase mb-1">Filière la plus populaire</p>
@@ -855,7 +893,7 @@ const AdminDashboard = () => {
                             const counts = utilisateurs.reduce((acc, u) => {
                               acc[u.filiere] = (acc[u.filiere] || 0) + 1;
                               return acc;
-                            }, { informatique: 0, medecine: 0, droit: 0, gestion: 0, architecture: 0 });
+                            }, { informatique: 0, sic: 0, sae: 0, st: 0, medecine: 0, droit: 0, gestion: 0, architecture: 0 });
                             const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
                             const top = sorted[0]?.[0] || '-';
                             return top.charAt(0).toUpperCase() + top.slice(1);

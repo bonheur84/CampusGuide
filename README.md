@@ -446,6 +446,3 @@ Pour toute question ou support:
 - [ ] Analytics avancés
 - [ ] Multi-langues
 
----
-
-**Développé avec ❤️ pour les étudiants**

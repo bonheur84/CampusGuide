@@ -139,7 +139,7 @@ INSERT IGNORE INTO clubs (id, nom, description, membres, categorie, categorie_no
 ('c-005', 'Club d''Echec', 'Tournois et analyses de parties.', 24, 'academique', 'Academique', 'fa-chess', 'https://wa.me/22997047047', '["Strategie", "Logique", "Patience", "Analyse"]'),
 ('c-006', 'Club Football', 'Entrainements hebdomadaires.', 98, 'sport', 'Sport', 'fa-futbol', 'https://wa.me/22997047047', '["Travail d equipe", "Endurance", "Leadership", "Discipline"]'),
 ('c-007', 'Club Basketball', 'Rejoignez notre equipe de basket.', 28, 'sport', 'Sport', 'fa-basketball', 'https://wa.me/22997047047', '["Coordination", "Travail d equipe", "Agilite", "Strategie"]'),
-('c-008', "Club d'Art", 'Peinture, dessin et photographie.', 24, 'art', 'Art & Culture', 'fa-camera', 'https://wa.me/22997047047', '["Creativite", "Techniques artistiques", "Vision artistique", "Expression"]'),
+('c-008', 'Club d''Art', 'Peinture, dessin et photographie.', 24, 'art', 'Art & Culture', 'fa-camera', 'https://wa.me/22997047047', '["Creativite", "Techniques artistiques", "Vision artistique", "Expression"]'),
 ('c-009', 'Club Sciences', 'Experiences et conferences.', 37, 'academique', 'Academique', 'fa-flask', 'https://wa.me/22997047047', '["Methode scientifique", "Analyse", "Recherche", "Communication"]'),
 ('c-010', 'Club Volleyball', 'Entrainements de volley.', 41, 'sport', 'Sport', 'fa-volleyball', 'https://wa.me/22997047047', '["Travail d equipe", "Reflexes", "Communication", "Endurance"]'),
 ('c-011', 'Club Eloquence', 'Concours de debat et de plaidoirie.', 19, 'art', 'Art & Culture', 'fa-microphone', 'https://wa.me/22997047047', '["Art oratoire", "Argumentation", "Confiance en soi", "Communication"]');

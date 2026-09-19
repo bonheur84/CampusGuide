@@ -10,7 +10,7 @@ const APropos = () => {
         <div className="relative rounded-3xl overflow-hidden shadow-2xl">
           <div className="absolute inset-0">
             <LazyImage 
-              src="/public/assets/universite-nouveaux-horizons.jpg" 
+              src="/assets/universite-nouveaux-horizons.jpg"
               alt="Campus universitaire"
               className="w-full h-full object-cover"
             />
@@ -31,7 +31,7 @@ const APropos = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
             <LazyImage 
-              src="/public/assets/hall.jpg" 
+              src="/assets/hall.jpg"
               alt="Campus universitaire"
               className="w-full h-64"
               placeholder={<div className="w-full h-64 bg-slate-200 animate-pulse flex items-center justify-center"><i className="fa-solid fa-building text-slate-400 text-4xl"></i></div>}
@@ -43,7 +43,7 @@ const APropos = () => {
           </div>
           <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
             <LazyImage 
-              src="/public/assets/image copy.png" 
+              src="/assets/image copy.png"
               alt="Bibliothèque"
               className="w-full h-64"
               placeholder={<div className="w-full h-64 bg-slate-200 animate-pulse flex items-center justify-center"><i className="fa-solid fa-book text-slate-400 text-4xl"></i></div>}
@@ -55,7 +55,7 @@ const APropos = () => {
           </div>
           <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
             <LazyImage 
-              src="/public/assets/amphi.jpg" 
+              src="/assets/amphi.jpg"
               alt="Amphithéâtre"
               className="w-full h-64"
               placeholder={<div className="w-full h-64 bg-slate-200 animate-pulse flex items-center justify-center"><i className="fa-solid fa-chalkboard-teacher text-slate-400 text-4xl"></i></div>}

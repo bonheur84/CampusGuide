@@ -133,10 +133,10 @@ INSERT IGNORE INTO mentors (id, nom, filiere, annee, specialite, bio, note, nb_e
 -- ─── Données initiales — Clubs ────────────────────────────────────────────────
 INSERT IGNORE INTO clubs (id, nom, description, membres, categorie, categorie_nom, icone, lien, competences) VALUES
 ('c-001', 'Club de Manga', 'Partagez votre passion pour les mangas.', 206, 'art', 'Art & Culture', 'fa-book', 'https://wa.me/22997047047', '["Dessin", "Créativité", "Culture japonaise", "Animation"]'),
-('c-002', "Club d'informatique", 'Hackathons, projets collaboratifs.', 62, 'tech', 'Tech', 'fa-code', 'https://wa.me/22997047047', '["Programmation", "Travail d equipe", "Resolution de problemes", "Innovation"]'),
+('c-002', 'Club d''informatique', 'Hackathons, projets collaboratifs.', 62, 'tech', 'Tech', 'fa-code', 'https://wa.me/22997047047', '["Programmation", "Travail d equipe", "Resolution de problemes", "Innovation"]'),
 ('c-003', 'Club de Scrabble', 'Des tournois reguliers.', 45, 'academique', 'Academique', 'fa-chess-board', 'https://wa.me/22997047047', '["Orthographe", "Strategie", "Concentration", "Competition"]'),
 ('c-004', 'Club Musical', 'Instrument, chant, composition.', 33, 'art', 'Art & Culture', 'fa-music', 'https://wa.me/22997047047', '["Musique", "Creativite", "Performance", "Travail d equipe"]'),
-('c-005', "Club d'Echec", 'Tournois et analyses de parties.', 24, 'academique', 'Academique', 'fa-chess', 'https://wa.me/22997047047', '["Strategie", "Logique", "Patience", "Analyse"]'),
+('c-005', 'Club d''Echec', 'Tournois et analyses de parties.', 24, 'academique', 'Academique', 'fa-chess', 'https://wa.me/22997047047', '["Strategie", "Logique", "Patience", "Analyse"]'),
 ('c-006', 'Club Football', 'Entrainements hebdomadaires.', 98, 'sport', 'Sport', 'fa-futbol', 'https://wa.me/22997047047', '["Travail d equipe", "Endurance", "Leadership", "Discipline"]'),
 ('c-007', 'Club Basketball', 'Rejoignez notre equipe de basket.', 28, 'sport', 'Sport', 'fa-basketball', 'https://wa.me/22997047047', '["Coordination", "Travail d equipe", "Agilite", "Strategie"]'),
 ('c-008', "Club d'Art", 'Peinture, dessin et photographie.', 24, 'art', 'Art & Culture', 'fa-camera', 'https://wa.me/22997047047', '["Creativite", "Techniques artistiques", "Vision artistique", "Expression"]'),

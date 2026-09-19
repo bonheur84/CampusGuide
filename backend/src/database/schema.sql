@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS utilisateurs (
   annee       VARCHAR(10)  DEFAULT NULL,
   role        ENUM('etudiant','admin') NOT NULL DEFAULT 'etudiant',
   created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ─── Mentors ──────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS mentors (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS mentors (
   status      ENUM('en_attente', 'approuve', 'rejete') NOT NULL DEFAULT 'en_attente',
   created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE SET NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ─── Clubs ────────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS clubs (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS clubs (
   lien         TEXT         DEFAULT NULL,
   competences  TEXT         DEFAULT NULL,
   created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ─── Messages ─────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS messages (

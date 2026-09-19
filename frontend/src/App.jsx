@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { FournisseurUtilisateur, ContexteUtilisateur } from './contexte/ContexteUtilisateur';
 import Navigation from './components/Navigation';
 import PageTransition from './components/ui/PageTransition';
 import OfflineIndicator from './components/OfflineIndicator';
 import AIAssistant from './components/AIAssistant';
+import { trackPageView } from './services/AnalyticsService';
 // Importation des pages (on va les créer juste après)
 import Accueil from './pages/Accueil';
 import Mentors from './pages/Mentors';
@@ -43,8 +44,14 @@ const RouteProtegee = ({ children }) => {
 };
 
 const ContenuApp = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(`${location.pathname}${location.search}`);
+  }, [location.pathname, location.search]);
+
   return (
-    <Router>
+    <>
       <div className="min-h-screen bg-white">
         <Navigation />
         <main className="pt-0">
@@ -75,14 +82,16 @@ const ContenuApp = () => {
       <OfflineIndicator />
       {/* AI Assistant - Positioned by the component itself */}
       <AIAssistant />
-    </Router>
+    </>
   );
 };
 
 const App = () => {
   return (
     <FournisseurUtilisateur>
-      <ContenuApp />
+      <Router>
+        <ContenuApp />
+      </Router>
     </FournisseurUtilisateur>
   );
 };

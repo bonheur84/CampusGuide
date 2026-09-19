@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { initializeAnalytics } from './services/AnalyticsService';
+
+initializeAnalytics();
 
 // Enregistrer le service worker pour le mode hors ligne PWA
 if ('serviceWorker' in navigator) {

@@ -162,6 +162,12 @@ const Login = () => {
               </button>
             </div>
           </form>
+          <p className="mt-6 text-center text-sm text-slate-500">
+            Pas encore de compte ?{' '}
+            <button type="button" onClick={() => navigate('/inscription')} className="font-semibold text-primary hover:underline">
+              Créer un compte
+            </button>
+          </p>
         </div>
       </div>
     </div>

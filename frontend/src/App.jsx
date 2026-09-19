@@ -17,6 +17,7 @@ import Profil from './pages/Profil';
 import Parametres from './pages/Parametres';
 import Notifications from './pages/Notifications';
 import Login from './pages/Login';
+import Inscription from './pages/Inscription';
 import DevenirMentor from './pages/DevenirMentor';
 import ProfilMentor from './pages/ProfilMentor';
 import AdminDashboard from './pages/AdminDashboard';
@@ -49,6 +50,7 @@ const ContenuApp = () => {
         <main className="pt-0">
           <Routes>
             <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+            <Route path="/inscription" element={<PageTransition><Inscription /></PageTransition>} />
             <Route path="/" element={<RouteProtegee><PageTransition><Accueil /></PageTransition></RouteProtegee>} />
             <Route path="/accueil" element={<RouteProtegee><PageTransition><Accueil /></PageTransition></RouteProtegee>} />
             <Route path="/mentors" element={<RouteProtegee><PageTransition><Mentors /></PageTransition></RouteProtegee>} />

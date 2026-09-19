@@ -9,6 +9,11 @@ const LazyImage = ({ src, alt, className, placeholder = null, ...props }) => {
   const imageSource = typeof src === 'string' ? src.replace(/^\/public\//, '/') : src;
 
   useEffect(() => {
+    if (!('IntersectionObserver' in window)) {
+      setIsInView(true);
+      return undefined;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -59,7 +64,7 @@ const LazyImage = ({ src, alt, className, placeholder = null, ...props }) => {
         <img
           src={imageSource}
           alt={alt}
-          className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={handleLoad}
           onError={handleError}
           {...props}

@@ -49,7 +49,7 @@ const Inscription = () => {
       <div
         className="relative flex min-h-45 flex-none items-center justify-center md:min-h-screen md:flex-1"
         style={{
-          backgroundImage: "url('/assets/universite-nouveaux-horizons.jpg')",
+          backgroundImage: "url('/assets/Universite-Nouveaux-Horizons.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

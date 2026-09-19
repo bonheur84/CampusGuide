@@ -10,7 +10,7 @@ const APropos = () => {
         <div className="relative rounded-3xl overflow-hidden shadow-2xl">
           <div className="absolute inset-0">
             <LazyImage 
-              src="/assets/universite-nouveaux-horizons.jpg"
+              src="/assets/Universite-Nouveaux-Horizons.jpg"
               alt="Campus universitaire"
               className="w-full h-full object-cover"
             />

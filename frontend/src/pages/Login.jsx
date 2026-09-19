@@ -85,7 +85,7 @@ const Login = () => {
       <div 
         className="flex-none md:flex-1 relative flex items-center justify-center min-h-[250px] md:min-h-screen" 
         style={{ 
-          backgroundImage: "url('/assets/universite-nouveaux-horizons.jpg')", 
+          backgroundImage: "url('/assets/Universite-Nouveaux-Horizons.jpg')", 
           backgroundSize: 'cover', 
           backgroundPosition: 'center', 
           backgroundRepeat: 'no-repeat' 

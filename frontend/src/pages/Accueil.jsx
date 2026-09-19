@@ -24,7 +24,7 @@ const Accueil = () => {
   return (
     <div className="anime-apparition bg-white">
       <main className="pb-16">
-        <section className="flex flex-col items-center text-center w-full relative" style={{ backgroundImage: 'url(/assets/universite-nouveaux-horizons.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '700px' }}>
+        <section className="flex flex-col items-center text-center w-full relative" style={{ backgroundImage: 'url(/assets/Universite-Nouveaux-Horizons.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '700px' }}>
           <div className="absolute inset-0 bg-black/40" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.4) 50%, rgba(255,255,255,0.95) 100%)' }}></div>
           <div className="relative z-10 pt-[100px] md:pt-[140px]">
           <span className="bg-white/90 text-primary px-4 py-2 rounded-full text-[10px] md:text-xs border border-primary font-bold tracking-wider relative z-2 inline-flex items-center gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.2)]">
